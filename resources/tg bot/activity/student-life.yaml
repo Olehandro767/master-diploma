@@ -1,0 +1,18 @@
+activity-lang-key: student-life
+activity-name: student-life
+content:
+  - callback: student-life-dormitories
+    label: "${{dormitories}} \uD83D\uDCF0"
+    type: activity
+  - callback: student-life-student-council
+    label: "${{student_council}} \uD83D\uDCF0"
+    type: activity
+#  - callback: student-life-buildings-map
+#    label: "${{buildings_map}} \uD83D\uDCF0"
+#    type: activity
+  - callback: "/start"
+    label: "${{back_nav_button}}"
+    type: activity
+  - callback: "/start"
+    label: "${{main_menu_nav_button}}"
+    type: activity

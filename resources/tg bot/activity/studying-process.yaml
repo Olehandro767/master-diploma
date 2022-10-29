@@ -1,0 +1,17 @@
+activity-lang-key: studying-process
+activity-name: studying-process
+content:
+  - callback: schedule
+    label: "${{actual_news}} \uD83D\uDCF0"
+    type: link
+    content: "https://www.rozklad.onaft.edu.ua/"
+  - callback: request-examples
+    label: "${{request_examples}} \uD83D\uDCF0"
+    type: link
+    content: "http://nmv.ontu.edu.ua/documantation?page=faculty"
+  - callback: "/start"
+    label: "${{back_nav_button}}"
+    type: activity
+  - callback: "/start"
+    label: "${{main_menu_nav_button}}"
+    type: activity

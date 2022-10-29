@@ -1,0 +1,19 @@
+spring:
+  mustache:
+    suffix: .html
+    check-template-location: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8888
+
+security:
+  basic:
+    enabled: false
+
+telegram-bot:
+  directory: './resources/tg bot'
+  env-file: .env

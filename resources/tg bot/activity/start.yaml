@@ -1,0 +1,28 @@
+activity-lang-key: start
+activity-name: "/start"
+activity-text: "${{activity-text}}"
+content:
+  - callback: actual-news
+    label: "${{actual_news}} \uD83D\uDCF0"
+    type: activity
+  - callback: advertisement
+    label: "${{advertisement}} \uD83D\uDCE3"
+    type: link
+    content: "https://www.onaft.edu.ua/"
+  - callback: studying-process
+    label: "${{studying_process}} \uD83D\uDC68\u200D\uD83C\uDFEB"
+    type: activity
+  - callback: student-life
+    label: "${{student_life}} \uD83C\uDF03"
+    type: activity
+  - callback: accountants
+    label: "${{accountants}}"
+    type: text-message
+    content: "${{accountants_content}}"
+  - callback: contacts
+    label: "${{contacts}}"
+    type: link
+    content: "https://ontu.edu.ua/coords"
+  - callback: social-networks
+    label: "${{social-networks}}"
+    type: activity

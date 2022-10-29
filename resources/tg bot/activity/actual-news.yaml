@@ -1,0 +1,17 @@
+activity-lang-key: actual-news
+activity-name: actual-news
+content:
+  - callback: news-site
+    label: "${{news_site}}"
+    type: link
+    content: "https://www.onaft.edu.ua/"
+  - callback: telegram-channel
+    label: "${{telegram_channel}}"
+    type: link
+    content: "https://t.me/ithumor"
+  - callback: "/start"
+    label: "${{back_nav_button}}"
+    type: activity
+  - callback: "/start"
+    label: "${{main_menu_nav_button}}"
+    type: activity

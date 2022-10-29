@@ -1,0 +1,25 @@
+activity-name: start
+content:
+  - callback: current-news
+    label: "${{current_news}} \uD83D\uDCF0"
+    type: activity
+  - callback: advertisement
+    label: "${{advertisement}} \uD83D\uDCE3"
+    type: activity
+  - callback: studying-process
+    label: "${{studying_process}}"
+    type: activity
+  - callback: student-life
+    label: "${{student_life}} \uD83C\uDF03"
+    type: activity
+  - callback: accountants
+    label: "${{accountants}}"
+    type: text-message
+    content: "${{accountants_content}}"
+  - callback: contacts
+    label: "${{contacts}}"
+    type: link
+    content: "http"
+  - callback: social-networks
+    label: "${{contacts}}"
+    type: activity

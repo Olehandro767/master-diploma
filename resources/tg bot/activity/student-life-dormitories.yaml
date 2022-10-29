@@ -1,0 +1,37 @@
+activity-lang-key: student-life-dormitories
+activity-name: student-life-dormitories
+content:
+  - callback: student-dormitories-site
+    label: "${{dormitories_site}}"
+    type: link
+    content: "https://studlifeod.ontu.edu.ua/%D0%B3%D1%83%D1%80%D1%82%D0%BE%D0%B6%D0%B8%D1%82%D0%BA%D0%B8/"
+  - callback: student-dormitory-2
+    label: "${{student_dormitory_label_2}}"
+    type: text-message
+    content: "${{student_dormitory_content_2}}"
+  - callback: student-dormitory-3
+    label: "${{student_dormitory_label_3}}"
+    type: text-message
+    content: "${{student_dormitory_content_3}}"
+  - callback: student-dormitory-4
+    label: "${{student_dormitory_label_4}}"
+    type: text-message
+    content: "${{student_dormitory_content_4}}"
+  - callback: student-dormitory-5
+    label: "${{student_dormitory_label_5}}"
+    type: text-message
+    content: "${{student_dormitory_content_5}}"
+  - callback: student-dormitory-7
+    label: "${{student_dormitory_label_7}}"
+    type: text-message
+    content: "${{student_dormitory_content_7}}"
+  - callback: student-dormitory-8
+    label: "${{student_dormitory_label_8}}"
+    type: text-message
+    content: "${{student_dormitory_content_8}}"
+  - callback: student-life
+    label: "${{back_nav_button}}"
+    type: activity
+  - callback: "/start"
+    label: "${{main_menu_nav_button}}"
+    type: activity

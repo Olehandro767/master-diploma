@@ -1,0 +1,21 @@
+activity-lang-key: social-networks
+activity-name: social-networks
+content:
+  - callback: ontu-facebook
+    label: "Facebook"
+    type: link
+    content: "https://www.facebook.com/onaft"
+  - callback: ontu-instagram
+    label: "Instagram"
+    type: link
+    content: "https://www.instagram.com/ontu__official/"
+  - callback: ontu-telegram
+    label: "Telegram"
+    type: link
+    content: "https://t.me/onaft"
+  - callback: "/start"
+    label: "${{back_nav_button}}"
+    type: activity
+  - callback: "/start"
+    label: "${{main_menu_nav_button}}"
+    type: activity
