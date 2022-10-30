@@ -6,12 +6,18 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AnnouncementBlockComponent } from './announcement-block/announcement-block.component';
+import { LangEditorProBlockComponent } from './lang-editor-pro-block/lang-editor-pro-block.component';
+import { TgActivityEditorProBlockComponent } from './tg-activity-editor-pro-block/tg-activity-editor-pro-block.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    MainPageComponent
+    MainPageComponent,
+    AnnouncementBlockComponent,
+    LangEditorProBlockComponent,
+    TgActivityEditorProBlockComponent
   ],
   imports: [
     BrowserModule,
