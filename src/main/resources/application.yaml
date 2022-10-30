@@ -6,8 +6,21 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  datasource:
+    url: jdbc:h2:file:./ontu_admin
+    username: ontu_bot
+    password: pAsSwOrD
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 
 server:
+  security:
+    initialization-vector: oPw_1Ksny9eU_2sj
+    admin-secret-key: fioehrid_jeifg3_3049Jsdkewo
+  cors: http://localhost:4200
   port: 8888
 
 security:

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { AbstractAjax } from './ajax.abstract-class';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AjaxServiceService {
+export class AjaxServiceService extends AbstractAjax {
 
-  public constructor() { }
+  public constructor() {
+    super();
+  }
 }
