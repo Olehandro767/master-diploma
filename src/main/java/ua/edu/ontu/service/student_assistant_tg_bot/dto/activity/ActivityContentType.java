@@ -9,7 +9,9 @@ public enum ActivityContentType {
     NONE("none"),
     ACTIVITY("activity"),
     LINK("link"),
-    TEXT_MESSAGE("text-message");
+    TEXT_MESSAGE("text-message"),
+    IMAGE("image"),
+    MULTIPART("multipart");
 
     @Getter
     private final String lowercaseName;

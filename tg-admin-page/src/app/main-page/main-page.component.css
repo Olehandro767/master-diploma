@@ -1,0 +1,21 @@
+.side-menu {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 350px;
+    height: 100%;
+    z-index: 1;
+}
+
+.main-block {
+    margin-left: 350px;
+    height: 100%;
+}
+
+.main-block::after {
+    width: 350px;
+}
+
+.main-block {
+    text-align: center;
+}

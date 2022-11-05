@@ -23,15 +23,15 @@ public class TelegramBotCallbackDispatcher {
 
     private final ActivityUtil activityUtil;
     private final BotEntryPointPropertiesDTO botEntryPointPropertiesDTO;
+    private ActivityContent[] messageTypeActivities;
+    private ActivityContent[] multipartTypeActivities;
     @Getter
     private Map<String, ActivityContentType> callbacksMap;
     @Getter
     private Map<String, ParsedActivity> activities;
-    @Getter
-    private ActivityContent[] messageTypeActivities;
 
-    public ActivityContent getMessageTypeActivity(String callback) {
-        for (var activity : this.messageTypeActivities) {
+    private ActivityContent getActivityContentByCallback(String callback, ActivityContent[] activityContents) {
+        for (var activity : activityContents) {
             if (activity.callback().equals(callback)) {
                 return activity;
             }
@@ -40,10 +40,19 @@ public class TelegramBotCallbackDispatcher {
         return null;
     }
 
+    public ActivityContent getMessageTypeActivity(String callback) {
+        return this.getActivityContentByCallback(callback, this.messageTypeActivities);
+    }
+
+    public ActivityContent getMultipartTypeActivity(String callback) {
+        return this.getActivityContentByCallback(callback, this.multipartTypeActivities);
+    }
+
     public void configureDispatcher(Activity[] activities) {
         this.callbacksMap = new HashMap<>();
         this.activities = new HashMap<>();
         var messageTypeActivitiesList = new ArrayList<ActivityContent>();
+        var multipartTypeActivitiesList = new ArrayList<ActivityContent>();
 
         for (var activity : activities) {
             var filteredActivityContent = Arrays.stream(activity.content())
@@ -55,6 +64,9 @@ public class TelegramBotCallbackDispatcher {
                 if (activityContent.type() == ActivityContentType.TEXT_MESSAGE) {
                     this.callbacksMap.put(activityContent.callback(), ActivityContentType.TEXT_MESSAGE);
                     messageTypeActivitiesList.add(activityContent);
+                } else if (activityContent.type() == ActivityContentType.MULTIPART) {
+                    this.callbacksMap.put(activityContent.callback(), ActivityContentType.MULTIPART);
+                    multipartTypeActivitiesList.add(activityContent);
                 }
             }
             this.activities.put(
@@ -65,6 +77,7 @@ public class TelegramBotCallbackDispatcher {
         }
 
         this.messageTypeActivities = messageTypeActivitiesList.toArray(ActivityContent[]::new);
+        this.multipartTypeActivities = multipartTypeActivitiesList.toArray(ActivityContent[]::new);
     }
 
     @PostConstruct

@@ -1,4 +1,28 @@
-<aside>
-    <a>{{ languageService.langDictionary.mainPageButtonTitlePostAnAd }}</a>
+<aside class="side-menu">
+    <div>
+        <a (click)="clickOnSideMenuButton(componentNames.langEditorPro)">
+            {{ languageService.langDictionary.mainPageButtonTitleLangEditorPro }}
+        </a>
+    </div>
+    <div>
+        <a (click)="clickOnSideMenuButton(componentNames.tgActivityEditorPro)">
+            {{ languageService.langDictionary.mainPageButtonTitleTgActivityEditorPro }}
+        </a>
+    </div>
+    <div>
+        <a (click)="clickOnSideMenuButton(componentNames.announcement)">
+            {{ languageService.langDictionary.mainPageButtonTitlePostAnAd }}
+        </a>
+    </div>
 </aside>
-<main></main>
+<main class="main-block">
+    <div>
+        <app-lang-editor-pro-block *ngIf="mainPageContext.mainComponentName == componentNames.langEditorPro">
+        </app-lang-editor-pro-block>
+        <app-tg-activity-editor-pro-block
+            *ngIf="mainPageContext.mainComponentName == componentNames.tgActivityEditorPro">
+        </app-tg-activity-editor-pro-block>
+        <app-announcement-block *ngIf="mainPageContext.mainComponentName == componentNames.announcement">
+        </app-announcement-block>
+    </div>
+</main>

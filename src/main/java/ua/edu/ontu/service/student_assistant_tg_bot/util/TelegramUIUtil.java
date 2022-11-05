@@ -25,7 +25,8 @@ public class TelegramUIUtil {
         if (activityContent.type() == ActivityContentType.LINK) {
             button.setUrl(activityContent.content());
         } else if (activityContent.type() == ActivityContentType.ACTIVITY
-                || activityContent.type() == ActivityContentType.TEXT_MESSAGE) {
+                || activityContent.type() == ActivityContentType.TEXT_MESSAGE
+                || activityContent.type() == ActivityContentType.MULTIPART) {
             button.setCallbackData(activityContent.callback());
         }
 

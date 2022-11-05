@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     if (this._tokenService.tokenExists()) {
       this._ajax.checkSession({
         succes: (newToken) => {
-          this._tokenService.setToken('ONTU ' + newToken)
+          this._tokenService.setToken('ONTU ' + newToken.response.token)
           this._ajax.token = 'ONTU ' + newToken
           this.applicationContext.applicationActivity = ACTIVITY_NAMES.main
         },

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LanguageService } from 'src/app/service/language/language.service';
 
 @Component({
   selector: 'app-announcement-block',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AnnouncementBlockComponent implements OnInit {
 
-  public constructor() { }
+  public constructor(
+    public readonly languageService: LanguageService,
+  ) { }
 
   public ngOnInit(): void {
   }

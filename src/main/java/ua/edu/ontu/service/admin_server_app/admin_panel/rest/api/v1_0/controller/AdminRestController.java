@@ -26,7 +26,7 @@ public class AdminRestController {
             return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(result.login())));
         }
 
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/sign-in")

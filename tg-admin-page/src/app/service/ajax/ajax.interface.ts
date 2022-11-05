@@ -4,5 +4,5 @@ export interface IAjax {
 
     signIn(login: string, password: string, funcs: ajaxFunc<tokenResponse>): void
 
-    checkSession(funcs: ajaxFunc<string>): void
+    checkSession(funcs: ajaxFunc<tokenResponse>): void
 }

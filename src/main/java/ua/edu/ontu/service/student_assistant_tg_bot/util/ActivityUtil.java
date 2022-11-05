@@ -19,7 +19,8 @@ public class ActivityUtil {
         var lowerCaseValue = value.toLowerCase();
         ActivityContentType[] types = {
                 ActivityContentType.ACTIVITY, ActivityContentType.LINK,
-                ActivityContentType.TEXT_MESSAGE,
+                ActivityContentType.TEXT_MESSAGE, ActivityContentType.IMAGE,
+                ActivityContentType.MULTIPART,
         };
 
         for (ActivityContentType type: types) {

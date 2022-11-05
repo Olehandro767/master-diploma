@@ -40,7 +40,7 @@ export class FetchAjaxService extends AbstractAjax implements IAjax {
       })
   }
 
-  public checkSession(funcs: ajaxFunc<string>): void {
+  public checkSession(funcs: ajaxFunc<tokenResponse>): void {
     fetch(`${this.SERVER_API_URL}/admin/check-session`, {
       method: 'GET',
       headers: this.getHeadersWithToken({})
