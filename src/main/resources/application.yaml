@@ -1,4 +1,5 @@
 spring:
+  banner.image.location: "classpath:banner.txt"
   mustache:
     suffix: .html
     check-template-location: false
