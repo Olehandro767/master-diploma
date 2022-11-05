@@ -5,6 +5,7 @@
     width: 350px;
     height: 100%;
     z-index: 1;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.295);
 }
 
 .main-block {
@@ -18,4 +19,8 @@
 
 .main-block {
     text-align: center;
+}
+
+.use-padding {
+    padding: 10px;
 }

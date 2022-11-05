@@ -21,12 +21,7 @@ public class AdminRestController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
     ) {
         var result = this.adminService.checkToken(authorizationHeader);
-
-        if (result.isValid()) {
-            return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(result.login())));
-        }
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(result.login())));
     }
 
     @PostMapping("/sign-in")

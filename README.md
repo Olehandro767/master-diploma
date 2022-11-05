@@ -15,9 +15,7 @@ Get started:
       * @img {url} - image type with url
       * @text {text} - text type
 
-For building UI we need create yaml file:
-
-Base yaml structure:\
+For building UI we need create yaml file. Base yaml structure:\
 activity-lang-key: {your lang key}\
 activity-name: {your activity name}\
 activity-text: {your activity text message (optional)}\

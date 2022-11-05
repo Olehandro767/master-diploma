@@ -2,6 +2,7 @@ package ua.edu.ontu.service.admin_server_app.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -120,6 +121,7 @@ public class ServerConfiguration implements WebMvcConfigurer {
     }
 }
 
+@Slf4j
 @RequiredArgsConstructor
 class RequestFilter extends OncePerRequestFilter {
 
@@ -128,12 +130,17 @@ class RequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        Authentication authentication =
-                (this.sessionServiceV1_0.authorizationHeaderIsValid(request.getHeader(HttpHeaders.AUTHORIZATION)))
-                        ? new UsernamePasswordAuthenticationToken(null, null, new ArrayList<>(
-                        List.of((GrantedAuthority) () -> "USER")
-                )) : new UsernamePasswordAuthenticationToken(null, null);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+        try {
+            Authentication authentication =
+                    (this.sessionServiceV1_0.authorizationHeaderIsValid(request.getHeader(HttpHeaders.AUTHORIZATION)))
+                            ? new UsernamePasswordAuthenticationToken(null, null, new ArrayList<>(
+                            List.of((GrantedAuthority) () -> "USER")
+                    )) : new UsernamePasswordAuthenticationToken(null, null);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } catch (Exception exception) {
+            RequestFilter.log.error(exception.getMessage(), exception);
+            throw exception;
+        }
     }
 }
