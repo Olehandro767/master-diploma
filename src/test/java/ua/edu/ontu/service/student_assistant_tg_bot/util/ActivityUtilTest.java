@@ -13,17 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ActivityUtilTest {
 
-    @Test
-    void test() throws FileNotFoundException {
-        var activityUtil = new ActivityUtil();
-        var activity = activityUtil
-                .convertYamlFileToActivity(new FileInputStream("./src/test/resources/start.yaml"));
-        var studyingProcess = Arrays.stream(activity.content())
-                .filter(activityContent -> activityContent.type() == ActivityContentType.ACTIVITY)
-                .filter(activityContent -> activityContent.label().contains("studying_process"))
-                .toList().get(0);
-        assertEquals(activity.activityName(), "start");
-        assertTrue(Objects.nonNull(studyingProcess));
-        assertEquals(studyingProcess.callback(), "studying-process");
-    }
+	@Test
+	void test() throws FileNotFoundException {
+		var activityUtil = new ActivityUtil();
+		var activity = activityUtil.convertYamlFileToActivity(new FileInputStream("./src/test/resources/start.yaml"));
+		var studyingProcess = Arrays.stream(activity.content())
+				.filter(activityContent -> activityContent.type() == ActivityContentType.ACTIVITY)
+				.filter(activityContent -> activityContent.label().contains("studying_process")).toList().get(0);
+		assertEquals(activity.activityName(), "start");
+		assertTrue(Objects.nonNull(studyingProcess));
+		assertEquals(studyingProcess.callback(), "studying-process");
+	}
 }

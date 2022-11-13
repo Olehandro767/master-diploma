@@ -15,41 +15,30 @@ import java.util.Objects;
 @Service
 public class ActivityUtil {
 
-    public ActivityContentType getActivityContentTypeFromString(String value) {
-        var lowerCaseValue = value.toLowerCase();
-        ActivityContentType[] types = {
-                ActivityContentType.ACTIVITY, ActivityContentType.LINK,
-                ActivityContentType.TEXT_MESSAGE, ActivityContentType.IMAGE,
-                ActivityContentType.MULTIPART,
-        };
+	public ActivityContentType getActivityContentTypeFromString(String value) {
+		var lowerCaseValue = value.toLowerCase();
+		ActivityContentType[] types = { ActivityContentType.ACTIVITY, ActivityContentType.LINK,
+				ActivityContentType.TEXT_MESSAGE, ActivityContentType.IMAGE, ActivityContentType.QUESTION,
+				ActivityContentType.MULTIPART, };
 
-        for (ActivityContentType type: types) {
-            if (type.getLowercaseName().equals(lowerCaseValue)) {
-                return type;
-            }
-        }
+		for (ActivityContentType type : types) {
+			if (type.getLowercaseName().equals(lowerCaseValue)) {
+				return type;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public Activity convertYamlFileToActivity(InputStream inputStream) {
-        var yaml = new Yaml();
-        Map<String, Object> map =  yaml.load(inputStream);
-        return new Activity(
-                (String) map.get("activity-name"),
-                (String) map.get("activity-text"),
-                new ArrayList<Map<String, String>>((List) map.get("content")).stream()
-                        .map(hashMap -> {
-                            var fullRowValue = hashMap.get("fullRow");
-                            return new ActivityContent(
-                                    hashMap.get("callback"),
-                                    hashMap.get("label"),
-                                    this.getActivityContentTypeFromString(hashMap.get("type")),
-                                    hashMap.get("content"),
-                                    Objects.nonNull(fullRowValue)
-                                            && fullRowValue.equalsIgnoreCase("true")
-                            );
-                        }).toList().toArray(ActivityContent[]::new)
-        );
-    }
+	public Activity convertYamlFileToActivity(InputStream inputStream) {
+		var yaml = new Yaml();
+		Map<String, Object> map = yaml.load(inputStream);
+		return new Activity((String) map.get("activity-name"), (String) map.get("activity-text"),
+				new ArrayList<Map<String, String>>((List) map.get("content")).stream().map(hashMap -> {
+					var fullRowValue = hashMap.get("fullRow");
+					return new ActivityContent(hashMap.get("callback"), hashMap.get("label"),
+							this.getActivityContentTypeFromString(hashMap.get("type")), hashMap.get("content"),
+							Objects.nonNull(fullRowValue) && fullRowValue.equalsIgnoreCase("true"));
+				}).toList().toArray(ActivityContent[]::new));
+	}
 }

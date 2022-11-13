@@ -14,45 +14,41 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class LanguageUtil {
 
-    private final BotEntryPointPropertiesDTO botProperties;
+	private final BotEntryPointPropertiesDTO botProperties;
 
-    public String getPropertyValueByKey(String langCode, String propertyKey) throws IOException {
-        var property = new Properties();
-        property.load(new InputStreamReader(
-                new FileInputStream(this.botProperties.getLangDirectory() + '/'
-                        + this.filterLanguageCode(langCode) + ".properties"),
-                StandardCharsets.UTF_8
-        ));
-        return property.getProperty(propertyKey);
-    }
+	public String getPropertyValueByKey(String langCode, String propertyKey) throws IOException {
+		var property = new Properties();
+		property.load(new InputStreamReader(new FileInputStream(
+				this.botProperties.getLangDirectory() + '/' + this.filterLanguageCode(langCode) + ".properties"),
+				StandardCharsets.UTF_8));
+		return property.getProperty(propertyKey);
+	}
 
-    public String filterLanguageCode(String langCode) {
-        return switch (langCode) {
-            case "ru", "ua" -> "ua";
-            default -> "en";
-        };
-    }
+	public String filterLanguageCode(String langCode) {
+		return switch (langCode) {
+		case "ru", "ua" -> "ua";
+//            default -> "en";
+		default -> "ua";
+		};
+	}
 
-    public String getTranslatedLineForActivity(String langCode, String activityName, String stringContent) throws IOException {
-        String startKeyPointer = "${{";
-        String endKeyPointer = "}}";
-        var property = new Properties();
-        property.load(new InputStreamReader(
-                new FileInputStream(this.botProperties.getLangDirectory() + '/'
-                        + this.filterLanguageCode(langCode) + ".properties"),
-                StandardCharsets.UTF_8
-        ));
+	public String getTranslatedLineForActivity(String langCode, String activityName, String stringContent)
+			throws IOException {
+		String startKeyPointer = "${{";
+		String endKeyPointer = "}}";
+		var property = new Properties();
+		property.load(new InputStreamReader(new FileInputStream(
+				this.botProperties.getLangDirectory() + '/' + this.filterLanguageCode(langCode) + ".properties"),
+				StandardCharsets.UTF_8));
 
-        while (stringContent.contains(startKeyPointer)) {
-            String key = stringContent.substring(
-                    stringContent.indexOf(startKeyPointer) + startKeyPointer.length(),
-                    stringContent.indexOf(endKeyPointer)
-            );
-            String propertyKey = (key.contains("nav_button")) ? key : activityName + '.' + key;
-            String propertyLine = property.getProperty(propertyKey);
-            stringContent = stringContent.replace(startKeyPointer + key + endKeyPointer, propertyLine);
-        }
+		while (stringContent.contains(startKeyPointer)) {
+			String key = stringContent.substring(stringContent.indexOf(startKeyPointer) + startKeyPointer.length(),
+					stringContent.indexOf(endKeyPointer));
+			String propertyKey = (key.contains("nav_button")) ? key : activityName + '.' + key;
+			String propertyLine = property.getProperty(propertyKey);
+			stringContent = stringContent.replace(startKeyPointer + key + endKeyPointer, propertyLine);
+		}
 
-        return stringContent;
-    }
+		return stringContent;
+	}
 }

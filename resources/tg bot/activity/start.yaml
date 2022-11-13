@@ -8,7 +8,7 @@ content:
   - callback: advertisement
     label: "${{advertisement}} \uD83D\uDCE3"
     type: link
-    content: "https://www.onaft.edu.ua/"
+    content: "https://ontu.edu.ua/"
   - callback: studying-process
     label: "${{studying_process}} \uD83D\uDC68\u200D\uD83C\uDFEB"
     type: activity
@@ -23,6 +23,10 @@ content:
     label: "${{contacts}}"
     type: link
     content: "https://ontu.edu.ua/coords"
+  - callback: post-an-advertisement
+    label: "${{post_an_advertisement}} &#128231;"
+    type: text-message
+    content: "${{post_an_advertisement_content}}"
   - callback: social-networks
     label: "${{social-networks}}"
     type: activity

@@ -6,7 +6,8 @@ content:
     type: activity
   - callback: student-life-student-council
     label: "${{student_council}} \uD83D\uDCF0"
-    type: activity
+    type: link
+    content: https://studlifeod.ontu.edu.ua/studsovet/
 #  - callback: student-life-buildings-map
 #    label: "${{buildings_map}} \uD83D\uDCF0"
 #    type: activity

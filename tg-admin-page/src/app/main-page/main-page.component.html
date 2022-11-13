@@ -9,11 +9,11 @@
             {{ languageService.langDictionary.mainPageButtonTitleTgActivityEditorPro }}
         </a>
     </div>
-    <div>
+    <!-- <div>
         <a (click)="clickOnSideMenuButton(componentNames.announcement)">
             {{ languageService.langDictionary.mainPageButtonTitlePostAnAd }}
         </a>
-    </div>
+    </div> -->
 </aside>
 <main class="main-block">
     <div class="use-padding">
@@ -22,7 +22,7 @@
         <app-tg-activity-editor-pro-block
             *ngIf="mainPageContext.mainComponentName == componentNames.tgActivityEditorPro">
         </app-tg-activity-editor-pro-block>
-        <app-announcement-block *ngIf="mainPageContext.mainComponentName == componentNames.announcement">
-        </app-announcement-block>
+        <!-- <app-announcement-block *ngIf="mainPageContext.mainComponentName == componentNames.announcement">
+        </app-announcement-block> -->
     </div>
 </main>

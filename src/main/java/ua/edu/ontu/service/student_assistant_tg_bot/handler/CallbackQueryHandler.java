@@ -10,16 +10,11 @@ import ua.edu.ontu.service.student_assistant_tg_bot.handler.common.CommonHandler
 @RequiredArgsConstructor
 public class CallbackQueryHandler implements ITelegramBotHandler<CallbackQuery> {
 
-    private final CommonHandler commonHandler;
+	private final CommonHandler commonHandler;
 
-    @Override
-    public void handle(DefaultAbsSender sender, CallbackQuery callbackQuery) {
-        this.commonHandler.handle(
-                sender,
-                callbackQuery.getMessage(),
-                callbackQuery.getFrom().getLanguageCode(),
-                callbackQuery.getMessage().getChatId(),
-                callbackQuery.getData()
-        );
-    }
+	@Override
+	public void handle(DefaultAbsSender sender, CallbackQuery callbackQuery) {
+		this.commonHandler.handle(sender, callbackQuery.getMessage(), callbackQuery.getFrom().getLanguageCode(),
+				callbackQuery.getMessage().getChatId(), callbackQuery.getData());
+	}
 }

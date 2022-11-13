@@ -48,99 +48,88 @@ import java.util.List;
 @Configuration
 public class ServerConfiguration implements WebMvcConfigurer {
 
-    private final String corsUrls;
-    private final IAdministratorRepository administratorRepository;
+	private final String corsUrls;
+	private final IAdministratorRepository administratorRepository;
 
-    @Autowired
-    public ServerConfiguration(
-            @Value("${server.cors}") String corsUrls,
-            IAdministratorRepository administratorRepository,
-            EncryptionUtil encryptionUtil
-    ) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
-            NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
-        this.corsUrls = corsUrls;
-        this.administratorRepository = administratorRepository;
-        new InitializationUtilV1_0(this.administratorRepository, encryptionUtil).setUpTheFirstLaunchOfTheApplication();
-    }
+	@Autowired
+	public ServerConfiguration(@Value("${server.cors}") String corsUrls,
+			IAdministratorRepository administratorRepository, EncryptionUtil encryptionUtil)
+			throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
+			NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
+		this.corsUrls = corsUrls;
+		this.administratorRepository = administratorRepository;
+		new InitializationUtilV1_0(this.administratorRepository, encryptionUtil).setUpTheFirstLaunchOfTheApplication();
+	}
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        var urls = this.corsUrls.trim().split(",");
-        String[] methods = { HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
-                HttpMethod.DELETE.name(), HttpMethod.OPTIONS.name() };
-        registry.addMapping("/api/**").allowedOrigins(urls).allowedMethods(methods).allowedHeaders("*");
-    }
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		var urls = this.corsUrls.trim().split(",");
+		String[] methods = { HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
+				HttpMethod.DELETE.name(), HttpMethod.OPTIONS.name() };
+		registry.addMapping("/api/**").allowedOrigins(urls).allowedMethods(methods).allowedHeaders("*");
+	}
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/admin/**").setViewName("forward:/static/admin/index.html");
-    }
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/admin/**").setViewName("forward:/static/admin/index.html");
+	}
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    }
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+	}
 
-    @Bean
-    public WebSecurityCustomizer ignoringUrlsConfiguration() {
-        return (web) -> web.ignoring().antMatchers("/static/**");
-    }
+	@Bean
+	public WebSecurityCustomizer ignoringUrlsConfiguration() {
+		return (web) -> web.ignoring().antMatchers("/static/**");
+	}
 
-    @Bean
-    public SecurityFilterChain httpConfiguration(
-            HttpSecurity http,
-            @Qualifier("session_service_v1.0") SessionService sessionServiceV1_0
-    ) throws Exception {
-        var paths = new String[] { "/admin", "/api/v1.0/admin/sign-in", };
-        return http
-                .authorizeRequests().antMatchers(paths).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .csrf().disable()
-                .formLogin().disable()
-                .logout().disable()
-                .securityContext()
-                .and()
-                .addFilterBefore(new RequestFilter(sessionServiceV1_0), UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
+	@Bean
+	public SecurityFilterChain httpConfiguration(HttpSecurity http,
+			@Qualifier("session_service_v1.0") SessionService sessionServiceV1_0) throws Exception {
+		var paths = new String[] { "/admin", "/api/v1.0/admin/sign-in", };
+		return http.authorizeRequests().antMatchers(paths).permitAll().anyRequest().authenticated().and().csrf()
+				.disable().formLogin().disable().logout().disable().securityContext().and()
+				.addFilterBefore(new RequestFilter(sessionServiceV1_0), UsernamePasswordAuthenticationFilter.class)
+				.build();
+	}
 
-    @Bean
-    public ObjectMapper createGlobalJacksonObjectMapper() {
-        return new ObjectMapper();
-    }
+	@Bean
+	public ObjectMapper createGlobalJacksonObjectMapper() {
+		return new ObjectMapper();
+	}
 
-    @Bean
-    public RestTemplate createRestTemplate() {
-        return new RestTemplate();
-    }
+	@Bean
+	public RestTemplate createRestTemplate() {
+		return new RestTemplate();
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return (authentication) -> authentication;
-    }
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return (authentication) -> authentication;
+	}
 }
 
 @Slf4j
 @RequiredArgsConstructor
 class RequestFilter extends OncePerRequestFilter {
 
-    private final SessionService sessionServiceV1_0;
+	private final SessionService sessionServiceV1_0;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        try {
-            Authentication authentication =
-                    (this.sessionServiceV1_0.authorizationHeaderIsValid(request.getHeader(HttpHeaders.AUTHORIZATION)))
-                            ? new UsernamePasswordAuthenticationToken(null, null, new ArrayList<>(
-                            List.of((GrantedAuthority) () -> "USER")
-                    )) : new UsernamePasswordAuthenticationToken(null, null);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            filterChain.doFilter(request, response);
-        } catch (Exception exception) {
-            RequestFilter.log.error(exception.getMessage(), exception);
-            throw exception;
-        }
-    }
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		try {
+			Authentication authentication = (this.sessionServiceV1_0
+					.authorizationHeaderIsValid(request.getHeader(HttpHeaders.AUTHORIZATION)))
+							? new UsernamePasswordAuthenticationToken(null, null,
+									new ArrayList<>(List.of((GrantedAuthority) () -> "USER")))
+							: new UsernamePasswordAuthenticationToken(null, null);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			filterChain.doFilter(request, response);
+		} catch (Exception exception) {
+			RequestFilter.log.error(exception.getMessage(), exception);
+			throw exception;
+		}
+	}
 }

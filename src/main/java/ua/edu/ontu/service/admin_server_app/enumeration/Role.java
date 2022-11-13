@@ -6,14 +6,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Role {
 
-    ADMIN("admin");
+	ADMIN("admin");
 
-    @Getter
-    private final String lowercaseName;
+	@Getter
+	private final String lowercaseName;
 
-    public static Role[] getAllRoles() {
-        return new Role[] {
-                ADMIN
-        };
-    }
+	public static Role[] getAllRoles() {
+		return new Role[] { ADMIN };
+	}
 }

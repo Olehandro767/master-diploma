@@ -14,24 +14,23 @@ import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.service.Ad
 @RequestMapping("/api/v1.0/admin")
 public class AdminRestController {
 
-    private final AdminService adminService;
+	private final AdminService adminService;
 
-    @GetMapping("/check-session")
-    public ResponseEntity<SignInResponse> checkSession(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
-    ) {
-        var result = this.adminService.checkToken(authorizationHeader);
-        return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(result.login())));
-    }
+	@GetMapping("/check-session")
+	public ResponseEntity<SignInResponse> checkSession(
+			@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+		var result = this.adminService.checkToken(authorizationHeader);
+		return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(result.login())));
+	}
 
-    @PostMapping("/sign-in")
-    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest json) {
-        var adminResult = this.adminService.checkAdmin(json);
+	@PostMapping("/sign-in")
+	public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest json) {
+		var adminResult = this.adminService.checkAdmin(json);
 
-        if (adminResult.isValid()) {
-            return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(json.getLogin())));
-        }
+		if (adminResult.isValid()) {
+			return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(json.getLogin())));
+		}
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	}
 }

@@ -4,5 +4,5 @@ import org.telegram.telegrambots.bots.DefaultAbsSender;
 
 public interface ITelegramBotHandler<T> {
 
-    void handle(DefaultAbsSender sender, T t);
+	void handle(DefaultAbsSender sender, T t) throws Exception;
 }

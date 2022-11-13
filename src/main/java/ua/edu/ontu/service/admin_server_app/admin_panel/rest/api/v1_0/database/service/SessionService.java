@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service(value = "session_service_v1.0")
 public class SessionService {
 
-    public boolean authorizationHeaderIsValid(String authorizationHeaderValue) {
-        return false;
-    }
+	public boolean authorizationHeaderIsValid(String authorizationHeaderValue) {
+		return false;
+	}
 }

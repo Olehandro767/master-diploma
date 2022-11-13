@@ -6,13 +6,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ActivityContentType {
 
-    NONE("none"),
-    ACTIVITY("activity"),
-    LINK("link"),
-    TEXT_MESSAGE("text-message"),
-    IMAGE("image"),
-    MULTIPART("multipart");
+	NONE("none"), ACTIVITY("activity"), LINK("link"), TEXT_MESSAGE("text-message"), IMAGE("image"),
+	QUESTION("question"), MULTIPART("multipart");
 
-    @Getter
-    private final String lowercaseName;
+	@Getter
+	private final String lowercaseName;
 }

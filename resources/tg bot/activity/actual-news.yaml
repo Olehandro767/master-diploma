@@ -4,7 +4,7 @@ content:
   - callback: news-site
     label: "${{news_site}}"
     type: link
-    content: "https://www.onaft.edu.ua/"
+    content: "https://ontu.edu.ua/"
   - callback: telegram-channel
     label: "${{telegram_channel}}"
     type: link

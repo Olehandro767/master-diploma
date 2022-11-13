@@ -16,20 +16,20 @@ import java.security.spec.InvalidKeySpecException;
 @RequiredArgsConstructor
 public class InitializationUtilV1_0 {
 
-    private final IAdministratorRepository administratorRepository;
-    private final EncryptionUtil encryptionUtil;
+	private final IAdministratorRepository administratorRepository;
+	private final EncryptionUtil encryptionUtil;
 
-    public void setUpTheFirstLaunchOfTheApplication() throws InvalidAlgorithmParameterException, NoSuchPaddingException,
-            IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException,
-            InvalidKeyException {
-        var adminList = this.administratorRepository.findAll();
+	public void setUpTheFirstLaunchOfTheApplication()
+			throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
+			NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
+		var adminList = this.administratorRepository.findAll();
 
-        if (adminList.size() < 1) {
-            var administrator = new Administrator();
-            administrator.setLogin("admin");
-            administrator.setPassword("admin", this.encryptionUtil);
-            administrator.setName("admin");
-            this.administratorRepository.save(administrator);
-        }
-    }
+		if (adminList.size() < 1) {
+			var administrator = new Administrator();
+			administrator.setLogin("admin");
+			administrator.setPassword("admin", this.encryptionUtil);
+			administrator.setName("admin");
+			this.administratorRepository.save(administrator);
+		}
+	}
 }

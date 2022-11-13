@@ -5,5 +5,5 @@ import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.m
 
 public interface IAdministratorRepository extends JpaRepository<Administrator, Long> {
 
-    Administrator findByLogin(String login);
+	Administrator findByLogin(String login);
 }

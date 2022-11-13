@@ -15,24 +15,25 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AdminService {
 
-    private final IAdministratorRepository administratorRepository;
-    private final EncryptionUtil encryptionUtil;
-    private final JwtUtil jwtUtil;
+	private final IAdministratorRepository administratorRepository;
+	private final EncryptionUtil encryptionUtil;
+	private final JwtUtil jwtUtil;
 
-    public TokenResult checkToken(String token) {
-        return this.jwtUtil.getAdminInfoFromToken(token);
-    }
+	public TokenResult checkToken(String token) {
+		return this.jwtUtil.getAdminInfoFromToken(token);
+	}
 
-    public CheckAdminResult checkAdmin(SignInRequest signInRequest) {
-        try {
-            var admin = this.administratorRepository.findByLogin(signInRequest.getLogin());
-            return new CheckAdminResult(admin, Objects.nonNull(admin)
-                    && admin.checkPassword(signInRequest.getPassword(), this.encryptionUtil));
-        } catch (Exception ignore) {}
-        return new CheckAdminResult(null, false);
-    }
+	public CheckAdminResult checkAdmin(SignInRequest signInRequest) {
+		try {
+			var admin = this.administratorRepository.findByLogin(signInRequest.getLogin());
+			return new CheckAdminResult(admin,
+					Objects.nonNull(admin) && admin.checkPassword(signInRequest.getPassword(), this.encryptionUtil));
+		} catch (Exception ignore) {
+		}
+		return new CheckAdminResult(null, false);
+	}
 
-    public String generateToken(String login) {
-        return this.jwtUtil.generateAdminToken(login);
-    }
+	public String generateToken(String login) {
+		return this.jwtUtil.generateAdminToken(login);
+	}
 }

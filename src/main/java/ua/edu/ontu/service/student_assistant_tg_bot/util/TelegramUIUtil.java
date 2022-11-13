@@ -15,50 +15,52 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TelegramUIUtil {
 
-    private final LanguageUtil languageUtil;
+	private final LanguageUtil languageUtil;
 
-    public InlineKeyboardButton createButton(String activityName, ActivityContent activityContent, String langCode) throws IOException {
-        var button = new InlineKeyboardButton(this.languageUtil.getTranslatedLineForActivity(
-                langCode, activityName, activityContent.label()
-        ));
+	public InlineKeyboardButton createButton(String activityName, ActivityContent activityContent, String langCode)
+			throws IOException {
+		var button = new InlineKeyboardButton(
+				this.languageUtil.getTranslatedLineForActivity(langCode, activityName, activityContent.label()));
 
-        if (activityContent.type() == ActivityContentType.LINK) {
-            button.setUrl(activityContent.content());
-        } else if (activityContent.type() == ActivityContentType.ACTIVITY
-                || activityContent.type() == ActivityContentType.TEXT_MESSAGE
-                || activityContent.type() == ActivityContentType.MULTIPART) {
-            button.setCallbackData(activityContent.callback());
-        }
+		if (activityContent.type() == ActivityContentType.LINK) {
+			button.setUrl(activityContent.content());
+		} else if (activityContent.type() == ActivityContentType.ACTIVITY
+				|| activityContent.type() == ActivityContentType.TEXT_MESSAGE
+				|| activityContent.type() == ActivityContentType.QUESTION
+				|| activityContent.type() == ActivityContentType.MULTIPART) {
+			button.setCallbackData(activityContent.callback());
+		}
 
-        return button;
-    }
+		return button;
+	}
 
-    public InlineKeyboardMarkup buildDefaultUI(String activityName, ActivityContent[] activityContents, String langCode) throws IOException {
-        var lines = new ArrayList<List<InlineKeyboardButton>>();
+	public InlineKeyboardMarkup buildDefaultUI(String activityName, ActivityContent[] activityContents, String langCode)
+			throws IOException {
+		var lines = new ArrayList<List<InlineKeyboardButton>>();
 
-        for (int i = 0; i < activityContents.length; i++) {
-            var row = new ArrayList<InlineKeyboardButton>();
+		for (int i = 0; i < activityContents.length; i++) {
+			var row = new ArrayList<InlineKeyboardButton>();
 
-            for (int j = 0; j < 2 && i + j < activityContents.length; j++) {
-                int localIndex = i + j;
+			for (int j = 0; j < 2 && i + j < activityContents.length; j++) {
+				int localIndex = i + j;
 
-                if (!activityContents[localIndex].fullRow()) {
-                    row.add(this.createButton(activityName, activityContents[localIndex], langCode));
-                } else {
-                    row.add(this.createButton(activityName, activityContents[localIndex], langCode));
-                    break;
-                }
-            }
+				if (!activityContents[localIndex].fullRow()) {
+					row.add(this.createButton(activityName, activityContents[localIndex], langCode));
+				} else {
+					row.add(this.createButton(activityName, activityContents[localIndex], langCode));
+					break;
+				}
+			}
 
-            i += row.size() - 1;
-            lines.add(row);
-        }
+			i += row.size() - 1;
+			lines.add(row);
+		}
 
-        return new InlineKeyboardMarkup(lines);
-    }
+		return new InlineKeyboardMarkup(lines);
+	}
 
-    public InlineKeyboardMarkup buildUI(String activityName, ActivityContent[] activityContents, String langCode)
-            throws IOException { // For creating elastic style builder in future
-        return this.buildDefaultUI(activityName, activityContents, langCode);
-    }
+	public InlineKeyboardMarkup buildUI(String activityName, ActivityContent[] activityContents, String langCode)
+			throws IOException { // For creating elastic style builder in future
+		return this.buildDefaultUI(activityName, activityContents, langCode);
+	}
 }

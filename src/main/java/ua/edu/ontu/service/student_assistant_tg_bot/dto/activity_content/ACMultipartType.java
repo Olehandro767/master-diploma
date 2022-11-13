@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ACMultipartType {
-    IMAGE("@img"),
-    TEXT("@text");
+	IMAGE("@img"), TEXT("@text");
 
-    @Getter
-    private final String key;
+	@Getter
+	private final String key;
 }
