@@ -1,22 +1,24 @@
-package ua.edu.ontu.service.student_assistant_tg_bot.service;
+package ua.edu.ontu.service.student_assistant_tg_bot.service.bot;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.BotEntryPointPropertiesDTO;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.Activity;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContent;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContentType;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ParsedActivity;
-import ua.edu.ontu.service.student_assistant_tg_bot.util.ActivityUtil;
-
-import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.IntFunction;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Service;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.BotEntryPointPropertiesDTO;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.Activity;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContent;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContentType;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ParsedActivity;
+import ua.edu.ontu.service.student_assistant_tg_bot.util.ActivityUtil;
 
 @Service
 @RequiredArgsConstructor

@@ -1,15 +1,15 @@
-package ua.edu.ontu.service.student_assistant_tg_bot.service;
-
-import lombok.extern.slf4j.Slf4j;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.BotEntryPointPropertiesDTO;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.Activity;
-import ua.edu.ontu.service.student_assistant_tg_bot.util.ActivityUtil;
+package ua.edu.ontu.service.student_assistant_tg_bot.service.bot;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import lombok.extern.slf4j.Slf4j;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.BotEntryPointPropertiesDTO;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.Activity;
+import ua.edu.ontu.service.student_assistant_tg_bot.util.ActivityUtil;
 
 @Slf4j
 public class TelegramBotCompiler {

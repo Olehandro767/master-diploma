@@ -33,10 +33,12 @@ public class MessageHandler implements ITelegramBotHandler<Message> {
 				for (var messageEntity : message.getEntities()) {
 					if (messageEntity.getType().equalsIgnoreCase("bot_command")) {
 						this.commonHandler.handle(sender, message, langCode, chatId, messageEntity.getText());
+					} else if (messageEntity.getType().equalsIgnoreCase("hashtag")) {
+						if (this.advertisementMessageHandler.checkUserTextOnStartKeywords(message.getText())) {
+							this.advertisementMessageHandler.handle(sender, message);
+						}
 					}
 				}
-			} else if (this.advertisementMessageHandler.checkUserTextOnStartKeywords(message.getText())) {
-				this.advertisementMessageHandler.handle(sender, message);
 			} else {
 				String errorMessage = this.languageUtil.getPropertyValueByKey(langCode,
 						"error.can-not-resolve-message");

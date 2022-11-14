@@ -1,14 +1,15 @@
 package ua.edu.ontu.service.student_assistant_tg_bot.util;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.BotEntryPointPropertiesDTO;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.BotEntryPointPropertiesDTO;
 
 @Service
 @RequiredArgsConstructor

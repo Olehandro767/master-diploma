@@ -31,4 +31,10 @@ security:
 telegram-bot:
   directory: './resources/tg bot'
   env-file: .env
-  post-an-advertisement-start-string-part: '#ONTU_advertisement '
+  advertisement-email-address: test@gmail.com
+  
+mail:
+  host: host
+  port: port
+  application-email: app@gmail.com
+  application-email-password: password

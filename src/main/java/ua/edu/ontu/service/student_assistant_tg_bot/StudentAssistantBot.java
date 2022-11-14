@@ -23,7 +23,6 @@ public class StudentAssistantBot extends TelegramLongPollingBot {
 	private final MessageHandler messageHandler;
 	private final CallbackQueryHandler callbackQueryHandler;
 	private final BotEntryPointPropertiesDTO entryPointProperties;
-	
 
 	@Override
 	public String getBotUsername() {
@@ -48,5 +47,5 @@ public class StudentAssistantBot extends TelegramLongPollingBot {
 	public void postConstruct() throws TelegramApiException {
 		new TelegramBotsApi(DefaultBotSession.class).registerBot(this);
 		this.botContextDTO.setBot(this);
-		}
+	}
 }

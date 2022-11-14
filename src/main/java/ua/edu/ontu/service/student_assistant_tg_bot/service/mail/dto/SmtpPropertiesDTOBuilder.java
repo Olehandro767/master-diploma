@@ -1,5 +1,6 @@
 package ua.edu.ontu.service.student_assistant_tg_bot.service.mail.dto;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import lombok.Builder;
@@ -21,8 +22,12 @@ public class SmtpPropertiesDTOBuilder {
 	private String sslPort;
 	@Getter
 	private String tlsPort;
-	
+
 	public Properties getProperties() {
+		if (Objects.nonNull(this.customSmtpProperties)) {
+			return this.customSmtpProperties;
+		}
+		
 		return null; // TODO
 	}
 }

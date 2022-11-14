@@ -1,15 +1,16 @@
 package ua.edu.ontu.service.student_assistant_tg_bot.util;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContent;
-import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContentType;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import lombok.RequiredArgsConstructor;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContent;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContentType;
 
 @Service
 @RequiredArgsConstructor

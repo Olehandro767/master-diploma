@@ -1,7 +1,8 @@
 package ua.edu.ontu.service.student_assistant_tg_bot.handler.common;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,24 +11,23 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ua.edu.ontu.service.LogUtil;
 import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContentType;
-import ua.edu.ontu.service.student_assistant_tg_bot.service.TelegramBotCallbackDispatcher;
+import ua.edu.ontu.service.student_assistant_tg_bot.service.bot.TelegramBotCallbackDispatcher;
 import ua.edu.ontu.service.student_assistant_tg_bot.util.LanguageUtil;
 import ua.edu.ontu.service.student_assistant_tg_bot.util.TelegramUIUtil;
 import ua.edu.ontu.service.student_assistant_tg_bot.util.activity_content.ActivityContentMultipartTypeUtil;
-
-import java.io.IOException;
-import java.util.Objects;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommonHandler {
 
-	private final TelegramBotCallbackDispatcher dispatcher;
 	private final ActivityContentMultipartTypeUtil multipartTypeUtil;
-
+	private final TelegramBotCallbackDispatcher dispatcher;
 	private final TelegramUIUtil telegramUIUtil;
 	private final LanguageUtil languageUtil;
 	private final LogUtil logUtil;
@@ -39,16 +39,6 @@ public class CommonHandler {
 				setMessageId(message.getMessageId());
 			}
 		});
-	}
-
-	private SendMessage createMessage(long chatId, String message) {
-		return new SendMessage() {
-			{
-				setChatId(chatId);
-				setParseMode("HTML");
-				setText(message);
-			}
-		};
 	}
 
 	private void badRequest(DefaultAbsSender sender, String langCode, long chatId, Exception exceptionArg) {
@@ -76,6 +66,16 @@ public class CommonHandler {
 		} catch (Exception exception) {
 			CommonHandler.log.error(exception.getMessage(), exception);
 		}
+	}
+
+	public SendMessage createMessage(long chatId, String message) {
+		return new SendMessage() {
+			{
+				setChatId(chatId);
+				setParseMode("HTML");
+				setText(message);
+			}
+		};
 	}
 
 	public void handle(DefaultAbsSender sender, Message message, String langCode, long chatId, String messageString) {
