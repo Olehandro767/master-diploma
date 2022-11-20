@@ -19,7 +19,7 @@ spring:
 
 server:
   security:
-    initialization-vector: oPw_1Ksny9eU_2sj
+    initialization-vector: oPw_1Ksny9eU_2sj # length = 16
     admin-secret-key: fioehrid_jeifg3_3049Jsdkewo
   cors: http://localhost:4200
   port: 8888
@@ -31,10 +31,10 @@ security:
 telegram-bot:
   directory: './resources/tg bot'
   env-file: .env
-  advertisement-email-address: test@gmail.com
+  advertisement-email-address: 
   
 mail:
-  host: host
-  port: port
-  application-email: app@gmail.com
-  application-email-password: password
+  host: 
+  port: 
+  application-email: 
+  application-email-password: 
