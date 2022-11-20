@@ -1,5 +1,8 @@
 package ua.edu.ontu.service.student_assistant_tg_bot.handler.common;
 
+import static ua.edu.ontu.service.LogUtil.TELEGRAM_CLIENT_REQUEST_ERROR;
+import static ua.edu.ontu.service.LogUtil.logError;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -14,7 +17,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ua.edu.ontu.service.LogUtil;
 import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContentType;
 import ua.edu.ontu.service.student_assistant_tg_bot.service.bot.TelegramBotCallbackDispatcher;
 import ua.edu.ontu.service.student_assistant_tg_bot.util.LanguageUtil;
@@ -30,7 +32,6 @@ public class CommonHandler {
 	private final TelegramBotCallbackDispatcher dispatcher;
 	private final TelegramUIUtil telegramUIUtil;
 	private final LanguageUtil languageUtil;
-	private final LogUtil logUtil;
 
 	private void deleteOldMessage(DefaultAbsSender sender, long chatId, Message message) throws TelegramApiException {
 		sender.execute(new DeleteMessage() {
@@ -86,8 +87,7 @@ public class CommonHandler {
 
 			if (Objects.isNull(type)) {
 				type = ActivityContentType.NONE;
-				this.logUtil.logError(CommonHandler.log, LogUtil.TELEGRAM_CLIENT_REQUEST_ERROR,
-						"wrong callback (" + messageString + ')');
+				logError(CommonHandler.log, TELEGRAM_CLIENT_REQUEST_ERROR, "wrong callback (" + messageString + ')');
 			}
 
 			switch (type) {

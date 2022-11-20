@@ -15,6 +15,6 @@ public class TelegramBotConfiguration {
 			@Value("${mail.port}") String port, @Value("${mail.application-email}") String email,
 			@Value("${mail.application-email-password}") String password) {
 		var builder = SmtpPropertiesDTOBuilder.builder().smtpHost(host).smtpPort(port);
-		return new SmtpPropertiesDTO(builder.build().getCustomSmtpProperties(), email, password);
+		return new SmtpPropertiesDTO(builder.build().getProperties(), email, password);
 	}
 }

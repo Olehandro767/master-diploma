@@ -26,7 +26,6 @@ dependencies {
 	implementation 'com.sun.mail:javax.mail:1.6.2'
     // https://github.com/cdimascio/dotenv-java
     implementation 'io.github.cdimascio:dotenv-java:2.2.4'
-    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     compileOnly 'org.projectlombok:lombok:' + lombokVersion
     annotationProcessor 'org.projectlombok:lombok:' + lombokVersion
     testImplementation 'org.mockito:mockito-core:4.8.1'

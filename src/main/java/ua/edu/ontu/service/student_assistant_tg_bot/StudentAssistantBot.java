@@ -1,5 +1,7 @@
 package ua.edu.ontu.service.student_assistant_tg_bot;
 
+import java.util.Objects;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Component;
@@ -36,10 +38,15 @@ public class StudentAssistantBot extends TelegramLongPollingBot {
 
 	@Override
 	public void onUpdateReceived(Update update) {
+		var message = update.getMessage();
+
 		if (update.hasCallbackQuery()) {
 			this.callbackQueryHandler.handle(this, update.getCallbackQuery());
+		} else if ((message.hasPhoto() || message.hasDocument() || message.hasVideo())
+				&& (Objects.isNull(message.getCaption()) && Objects.isNull(message.getText()))) {
+			return;
 		} else {
-			this.messageHandler.handle(this, update.getMessage());
+			this.messageHandler.handle(this, message);
 		}
 	}
 
