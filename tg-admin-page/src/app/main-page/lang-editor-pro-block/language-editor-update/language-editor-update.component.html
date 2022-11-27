@@ -1,0 +1,8 @@
+<form onsubmit="return false">
+    <h1>{{mainPageContext.mainComponentContext.languagePackName}}</h1>
+    <br>
+    <textarea name="content" cols="150" rows="45" [placeholder]="languageService.langDictionary.content_field"
+        [(ngModel)]="languagePackContent" [value]="languagePackContent"></textarea>
+    <br>
+    <button type="submit" (click)="accept()">Ok</button>
+</form>

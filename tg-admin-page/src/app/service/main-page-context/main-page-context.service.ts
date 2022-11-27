@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class MainPageContextService {
 
   private _mainComponentName: string = ''
+  private _mainComponentContext: any = {}
 
   public constructor() { }
 
@@ -13,5 +14,13 @@ export class MainPageContextService {
 
   public set mainComponentName(value: string) {
     this._mainComponentName = value
+  }
+
+  public get mainComponentContext(): any {
+    return this._mainComponentContext
+  }
+
+  public set mainComponentContext(value: any) {
+    this._mainComponentContext = value
   }
 }

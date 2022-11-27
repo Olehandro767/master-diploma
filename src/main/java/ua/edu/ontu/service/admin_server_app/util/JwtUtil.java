@@ -1,17 +1,23 @@
 package ua.edu.ontu.service.admin_server_app.util;
 
-import com.auth0.jwt.algorithms.Algorithm;
-import lombok.Getter;
-import org.springframework.stereotype.Service;
-import ua.edu.ontu.service.admin_server_app.dto.jwt.TokenResult;
-import ua.edu.ontu.service.admin_server_app.enumeration.Role;
+import static com.auth0.jwt.JWT.create;
+import static com.auth0.jwt.JWT.require;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static com.auth0.jwt.JWT.create;
-import static com.auth0.jwt.JWT.require;
+import org.springframework.stereotype.Service;
 
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import ua.edu.ontu.service.LogUtil;
+import ua.edu.ontu.service.admin_server_app.dto.jwt.TokenResult;
+import ua.edu.ontu.service.admin_server_app.enumeration.Role;
+
+@Slf4j
 @Service
 public class JwtUtil {
 
@@ -28,11 +34,17 @@ public class JwtUtil {
 	}
 
 	private TokenResult decodeToken(Role role, String token) {
-		var decodedJwt = require(this.ALGORITHM).withIssuer("OAuth2").withClaim("role", role.getLowercaseName()).build()
-				.verify(token.substring(this.JWT_START_KEY_PART_LENGTH));
-		var parsedLocalDateTime = LocalDateTime.parse(decodedJwt.getClaim("end-session").asString());
-		return new TokenResult(decodedJwt.getClaim("login").asString(),
-				LocalDateTime.now().isBefore(parsedLocalDateTime));
+		try {
+			var decodedJwt = require(this.ALGORITHM).withIssuer("OAuth2").withClaim("role", role.getLowercaseName())
+					.build().verify(token.substring(this.JWT_START_KEY_PART_LENGTH));
+			var parsedLocalDateTime = LocalDateTime.parse(decodedJwt.getClaim("end-session").asString());
+			return new TokenResult(decodedJwt.getClaim("login").asString(),
+					LocalDateTime.now().isBefore(parsedLocalDateTime));
+		} catch (SignatureVerificationException exception) {
+			LogUtil.logError(log, LogUtil.ADMIN_PANEL_JWT_ERROR, "token = \"" + token + "\", role = " + role.name(),
+					exception);
+			return null;
+		}
 	}
 
 	public String generateAdminToken(String login) {

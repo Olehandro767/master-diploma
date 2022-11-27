@@ -1,0 +1,20 @@
+<div *ngIf="mainPageContext.mainComponentContext.pageName === ''">
+    <div id="create-new-activity">
+        <button (click)="mainPageContext.mainComponentContext.pageName = 'new activity'">+</button>
+    </div>
+    <ng-container *ngFor="let activity of activities">
+        <div (click)="openEditor(activity)">
+            <span>{{ activity }}</span>
+            <button (click)="remove(activity)">X</button>
+        </div>
+    </ng-container>
+</div>
+<div *ngIf="mainPageContext.mainComponentContext.pageName !== ''">
+    <div class="close-page-button">
+        <button (click)="mainPageContext.mainComponentContext.pageName = ''">X</button>
+    </div>
+    <app-tg-activity-editor-create-new *ngIf="mainPageContext.mainComponentContext.pageName === 'new activity'">
+    </app-tg-activity-editor-create-new>
+    <app-tg-activity-editor-update *ngIf="mainPageContext.mainComponentContext.pageName === 'update activity'">
+    </app-tg-activity-editor-update>
+</div>

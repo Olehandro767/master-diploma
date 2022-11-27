@@ -24,7 +24,9 @@ import ua.edu.ontu.service.student_assistant_tg_bot.util.ActivityUtil;
 @RequiredArgsConstructor
 public class TelegramBotCallbackDispatcher {
 
+	@Getter
 	private final ActivityUtil activityUtil;
+	@Getter
 	private final BotEntryPointPropertiesDTO botEntryPointPropertiesDTO;
 	private ActivityContent[] messageTypeActivities;
 	private ActivityContent[] questionTypeActivities;

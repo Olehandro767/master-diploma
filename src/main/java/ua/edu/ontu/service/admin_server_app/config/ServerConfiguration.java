@@ -1,8 +1,21 @@
 package ua.edu.ontu.service.admin_server_app.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,25 +38,16 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.repo.IAdministratorRepository;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.service.SessionService;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.util.InitializationUtilV1_0;
+import ua.edu.ontu.service.admin_server_app.dto.AppProperties;
 import ua.edu.ontu.service.admin_server_app.util.EncryptionUtil;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 public class ServerConfiguration implements WebMvcConfigurer {
@@ -99,7 +103,6 @@ public class ServerConfiguration implements WebMvcConfigurer {
 		return new ObjectMapper();
 	}
 
-	@Bean
 	public RestTemplate createRestTemplate() {
 		return new RestTemplate();
 	}
@@ -107,6 +110,12 @@ public class ServerConfiguration implements WebMvcConfigurer {
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return (authentication) -> authentication;
+	}
+
+	@Bean
+	public AppProperties createAppProperties(@Value("${telegram-bot-api.url}") String tgApiUrl,
+			@Value("${telegram-bot.directory}") String tgDirectory) {
+		return new AppProperties(tgApiUrl, tgDirectory);
 	}
 }
 

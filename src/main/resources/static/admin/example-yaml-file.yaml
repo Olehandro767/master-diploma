@@ -1,0 +1,18 @@
+activity-lang-key: example
+activity-name: example
+content:
+  - callback: example-callback
+    label: "${{example_label}}"
+    type: text-message
+    content: "${{example_content}}"
+  - callback: example-callback
+    label: "${{example_label}}"
+    type: link
+    content: "https://example.com"
+  - callback: example-callback
+    label: "${{example_label}}"
+    type: activity
+  - callback: example-callback
+    label: "${{example_label}}"
+    type: multipart
+    content: "@img https://example.com/example.jpg:::@text ${{example_content}}"

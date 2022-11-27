@@ -1,0 +1,10 @@
+<form onsubmit="return false">
+    <input type="text" name="activityName" [placeholder]="languageService.langDictionary.activity_field"
+        [(ngModel)]="activityName" [value]="activityName">
+    <br>
+    <br>
+    <textarea name="content" cols="85" rows="45" [placeholder]="languageService.langDictionary.content_field"
+        [(ngModel)]="activityContent" [value]="activityContent"></textarea>
+    <br>
+    <button type="submit" (click)="accept()">Ok</button>
+</form>
