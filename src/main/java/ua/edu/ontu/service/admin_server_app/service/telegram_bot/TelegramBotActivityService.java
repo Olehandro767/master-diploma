@@ -52,8 +52,10 @@ public class TelegramBotActivityService {
 			if (file.exists()) {
 				return false;
 			}
+			if (!file.createNewFile()) {
+				log.error("Can't create file");
+			}
 
-			file.createNewFile();
 			new FileOutputStream(file).write(json.getActivityContent().getBytes(StandardCharsets.UTF_8));
 			this.updateBot();
 			return true;

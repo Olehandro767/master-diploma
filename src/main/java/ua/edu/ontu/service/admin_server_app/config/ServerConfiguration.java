@@ -1,16 +1,9 @@
 package ua.edu.ontu.service.admin_server_app.config;
 
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -57,12 +50,10 @@ public class ServerConfiguration implements WebMvcConfigurer {
 
 	@Autowired
 	public ServerConfiguration(@Value("${server.cors}") String corsUrls,
-			IAdministratorRepository administratorRepository, EncryptionUtil encryptionUtil)
-			throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
-			NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
+			IAdministratorRepository administratorRepository, EncryptionUtil encryptionUtil) throws IOException {
 		this.corsUrls = corsUrls;
 		this.administratorRepository = administratorRepository;
-		new InitializationUtilVOne(this.administratorRepository, encryptionUtil).setUpTheFirstLaunchOfTheApplication();
+		new InitializationUtilVOne(this.administratorRepository).setUpTheFirstLaunchOfTheApplication();
 	}
 
 	@Override
@@ -85,17 +76,16 @@ public class ServerConfiguration implements WebMvcConfigurer {
 
 	@Bean
 	public WebSecurityCustomizer ignoringUrlsConfiguration() {
-		return (web) -> web.ignoring().antMatchers("/static/**");
+		return web -> web.ignoring().antMatchers("/static/**");
 	}
 
 	@Bean
 	public SecurityFilterChain httpConfiguration(HttpSecurity http,
-			@Qualifier("session_service_v1.0") SessionService sessionServiceV1_0) throws Exception {
+			@Qualifier("session_service_v1.0") SessionService sessionService) throws Exception {
 		var paths = new String[] { "/admin", "/api/v1.0/admin/sign-in", };
-		return http.authorizeRequests().antMatchers(paths).permitAll().anyRequest().authenticated().and().csrf()
+		return http.authorizeHttpRequests().antMatchers(paths).permitAll().anyRequest().authenticated().and().csrf()
 				.disable().formLogin().disable().logout().disable().securityContext().and()
-				.addFilterBefore(new RequestFilter(sessionServiceV1_0), UsernamePasswordAuthenticationFilter.class)
-				.build();
+				.addFilterBefore(new RequestFilter(sessionService), UsernamePasswordAuthenticationFilter.class).build();
 	}
 
 	@Bean
@@ -108,8 +98,8 @@ public class ServerConfiguration implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return (authentication) -> authentication;
+	public AuthenticationManager authenticationManagerBean() {
+		return authentication -> authentication;
 	}
 
 	@Bean
@@ -123,13 +113,13 @@ public class ServerConfiguration implements WebMvcConfigurer {
 @RequiredArgsConstructor
 class RequestFilter extends OncePerRequestFilter {
 
-	private final SessionService sessionServiceV1_0;
+	private final SessionService sessionService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			Authentication authentication = (this.sessionServiceV1_0
+			Authentication authentication = (this.sessionService
 					.authorizationHeaderIsValid(request.getHeader(HttpHeaders.AUTHORIZATION)))
 							? new UsernamePasswordAuthenticationToken(null, null,
 									new ArrayList<>(List.of((GrantedAuthority) () -> "USER")))

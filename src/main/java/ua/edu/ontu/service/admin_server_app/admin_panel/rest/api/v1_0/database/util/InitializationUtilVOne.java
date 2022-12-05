@@ -18,8 +18,8 @@ public class InitializationUtilVOne {
 	public void setUpTheFirstLaunchOfTheApplication() throws IOException {
 		var adminList = this.administratorRepository.findAll();
 
-		try (var inputStream = new FileInputStream("./resources/admin.inf")) {
-			if (adminList.isEmpty()) {
+		if (adminList.isEmpty()) {
+			try (var inputStream = new FileInputStream("./resources/admin.inf")) {
 				var properties = new Properties();
 				var administrator = new Administrator();
 				properties.load(inputStream);
@@ -27,10 +27,10 @@ public class InitializationUtilVOne {
 				administrator.setPassword(properties.getProperty("private_admin_password"));
 				administrator.setName("admin");
 				this.administratorRepository.save(administrator);
+			} catch (IOException exception) {
+				log.error("Can't resolve ./resources/admin.inf");
+				System.exit(-1);
 			}
-		} catch (IOException exception) {
-			log.error("Can't resolve ./resources/admin.inf");
-			System.exit(-1);
 		}
 	}
 }
