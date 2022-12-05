@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity.ActivityContentType;
+import ua.edu.ontu.service.student_assistant_tg_bot.dto.activity_content.ACMultipartType;
 import ua.edu.ontu.service.student_assistant_tg_bot.service.bot.TelegramBotCallbackDispatcher;
 import ua.edu.ontu.service.student_assistant_tg_bot.util.LanguageUtil;
 import ua.edu.ontu.service.student_assistant_tg_bot.util.TelegramUIUtil;
@@ -34,18 +35,15 @@ public class CommonHandler {
 	private final LanguageUtil languageUtil;
 
 	private void deleteOldMessage(DefaultAbsSender sender, long chatId, Message message) throws TelegramApiException {
-		sender.execute(new DeleteMessage() {
-			{
-				setChatId(chatId);
-				setMessageId(message.getMessageId());
-			}
-		});
+		var deleteMessage = new DeleteMessage();
+		deleteMessage.setChatId(chatId);
+		deleteMessage.setMessageId(message.getMessageId());
+		sender.execute(deleteMessage);
 	}
 
 	private void badRequest(DefaultAbsSender sender, String langCode, long chatId, Exception exceptionArg) {
 		try {
 			var activity = this.dispatcher.getActivities().get("/start");
-			var tgUiUtil = this.telegramUIUtil;
 			String propertyKey;
 
 			if (Objects.nonNull(exceptionArg)
@@ -56,34 +54,28 @@ public class CommonHandler {
 			}
 
 			String errorMessage = this.languageUtil.getPropertyValueByKey(langCode, propertyKey);
-			sender.execute(new SendMessage() {
-				{
-					setChatId(chatId);
-					setParseMode("HTML");
-					setText(errorMessage);
-					setReplyMarkup(tgUiUtil.buildUI("/start", activity.contents(), langCode));
-				}
-			});
+			var sendMessage = new SendMessage();
+			sendMessage.setChatId(chatId);
+			sendMessage.setParseMode("HTML");
+			sendMessage.setText(errorMessage);
+			sendMessage.setReplyMarkup(this.telegramUIUtil.buildUI("/start", activity.contents(), langCode));
+			sender.execute(sendMessage);
 		} catch (Exception exception) {
 			CommonHandler.log.error(exception.getMessage(), exception);
 		}
 	}
 
 	public SendMessage createMessage(long chatId, String message) {
-		return new SendMessage() {
-			{
-				setChatId(chatId);
-				setParseMode("HTML");
-				setText(message);
-			}
-		};
+		var sendMessage = new SendMessage();
+		sendMessage.setChatId(chatId);
+		sendMessage.setParseMode("HTML");
+		sendMessage.setText(message);
+		return sendMessage;
 	}
 
 	public void handle(DefaultAbsSender sender, Message message, String langCode, long chatId, String messageString) {
 		try {
 			var type = this.dispatcher.getCallbacksMap().get(messageString);
-			var tgUiUtil = this.telegramUIUtil;
-			var langUtil = this.languageUtil;
 
 			if (Objects.isNull(type)) {
 				type = ActivityContentType.NONE;
@@ -94,41 +86,38 @@ public class CommonHandler {
 			case ACTIVITY -> {
 				var activity = this.dispatcher.getActivities().get(messageString);
 				this.deleteOldMessage(sender, chatId, message);
-				sender.execute(new SendMessage() {
-					{
-						setChatId(chatId);
-						setParseMode("HTML");
+				var sendMessage = new SendMessage();
+				sendMessage.setChatId(chatId);
+				sendMessage.setParseMode("HTML");
 
-						if (Objects.nonNull(activity.activityText())) {
-							setText(langUtil.getTranslatedLineForActivity(langCode, messageString,
-									activity.activityText()));
-						} else {
-							setText(langUtil.getPropertyValueByKey(langCode, "default.activity-message"));
-						}
+				if (Objects.nonNull(activity.activityText())) {
+					sendMessage.setText(this.languageUtil.getTranslatedLineForActivity(langCode, messageString,
+							activity.activityText()));
+				} else {
+					sendMessage.setText(this.languageUtil.getPropertyValueByKey(langCode, "default.activity-message"));
+				}
 
-						setReplyMarkup(tgUiUtil.buildUI(messageString, activity.contents(), langCode));
-					}
-				});
+				sendMessage.setReplyMarkup(this.telegramUIUtil.buildUI(messageString, activity.contents(), langCode));
+				sender.execute(sendMessage);
 			}
 			case TEXT_MESSAGE -> {
 				String responseMessage = this.dispatcher.getMessageTypeActivity(messageString).content();
 				sender.execute(this.createMessage(chatId,
-						langUtil.getTranslatedLineForActivity(langCode, messageString, responseMessage)));
+						this.languageUtil.getTranslatedLineForActivity(langCode, messageString, responseMessage)));
 			}
 			case MULTIPART -> {
 				String multipartContent = this.dispatcher.getMultipartTypeActivity(messageString).content();
 				var contentArray = this.multipartTypeUtil.parseMultipartContentString(multipartContent);
 
 				for (var content : contentArray) {
-					switch (content.type()) {
-					case TEXT -> sender.execute(this.createMessage(chatId, this.languageUtil
-							.getTranslatedLineForActivity(langCode, messageString, content.content())));
-					case IMAGE -> sender.execute(new SendPhoto() {
-						{
-							setPhoto(new InputFile(content.content()));
-							setChatId(chatId);
-						}
-					});
+					if (content.type() == ACMultipartType.TEXT) {
+						sender.execute(this.createMessage(chatId, this.languageUtil
+								.getTranslatedLineForActivity(langCode, messageString, content.content())));
+					} else if (content.type() == ACMultipartType.IMAGE) {
+						var sendPhoto = new SendPhoto();
+						sendPhoto.setPhoto(new InputFile(content.content()));
+						sendPhoto.setChatId(chatId);
+						sender.execute(sendPhoto);
 					}
 				}
 			}

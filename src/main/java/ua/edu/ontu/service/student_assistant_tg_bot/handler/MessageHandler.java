@@ -3,7 +3,6 @@ package ua.edu.ontu.service.student_assistant_tg_bot.handler;
 import static ua.edu.ontu.service.LogUtil.TELEGRAM_CLIENT_REQUEST_INFO;
 import static ua.edu.ontu.service.LogUtil.logInfo;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
@@ -44,10 +43,9 @@ public class MessageHandler implements ITelegramBotHandler<Message> {
 				for (var messageEntity : message.getEntities()) {
 					if (messageEntity.getType().equalsIgnoreCase("bot_command")) {
 						this.commonHandler.handle(sender, message, langCode, chatId, messageEntity.getText());
-					} else if (messageEntity.getType().equalsIgnoreCase("hashtag")) {
-						if (this.advertisementMessageHandler.checkUserTextOnStartKeywords(messageString)) {
-							this.advertisementMessageHandler.handle(sender, message, messageString);
-						}
+					} else if (messageEntity.getType().equalsIgnoreCase("hashtag")
+							&& this.advertisementMessageHandler.checkUserTextOnStartKeywords(messageString)) {
+						this.advertisementMessageHandler.handle(sender, message, messageString);
 					}
 				}
 			} else if (this.advertisementMessageHandler.checkUserTextOnStartKeywords(messageString)) {
@@ -55,14 +53,12 @@ public class MessageHandler implements ITelegramBotHandler<Message> {
 			} else {
 				String errorMessage = this.languageUtil.getPropertyValueByKey(langCode,
 						"error.can-not-resolve-message");
-				sender.execute(new SendMessage() {
-					{
-						setChatId(chatId);
-						setText(errorMessage);
-					}
-				});
+				var sendMessage = new SendMessage();
+				sendMessage.setChatId(chatId);
+				sendMessage.setText(errorMessage);
+				sender.execute(sendMessage);
 			}
-		} catch (TelegramApiException | IOException exception) {
+		} catch (TelegramApiException exception) {
 			MessageHandler.log.error(exception.getMessage(), exception);
 		}
 	}

@@ -23,18 +23,16 @@ public class SmtpPropertiesDTOBuilder {
 	@Getter
 	private String tlsPort;
 
-	@SuppressWarnings("serial")
 	public Properties getProperties() {
 		if (Objects.nonNull(this.customSmtpProperties)) {
 			return this.customSmtpProperties;
 		}
-		return new Properties() {
-			{
-				put("mail.smtp.auth", "true");
-				put("mail.smtp.host", smtpHost);
-				put("mail.smtp.socketFactory.port", smtpPort);
-				put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-			}
-		};
+		var properties = new Properties();
+		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.host", smtpHost);
+		properties.put("mail.smtp.socketFactory.port", smtpPort);
+		properties.put("mail.smtps.ssl.checkserveridentity", "true");
+		properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		return properties;
 	}
 }

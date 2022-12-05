@@ -9,20 +9,30 @@ import java.util.Properties;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ua.edu.ontu.service.student_assistant_tg_bot.dto.BotEntryPointPropertiesDTO;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LanguageUtil {
 
 	private final BotEntryPointPropertiesDTO botProperties;
 
-	public String getPropertyValueByKey(String langCode, String propertyKey) throws IOException {
-		var property = new Properties();
-		property.load(new InputStreamReader(new FileInputStream(
-				this.botProperties.getLangDirectory() + '/' + this.filterLanguageCode(langCode) + ".properties"),
-				StandardCharsets.UTF_8));
-		return property.getProperty(propertyKey);
+	public String getPropertyValueByKey(String langCode, String propertyKey) {
+		InputStreamReader inputStreamReader = null;
+		try {
+			String path = this.botProperties.getLangDirectory() + '/' + this.filterLanguageCode(langCode)
+					+ ".properties";
+			var property = new Properties();
+			var fileInputStream = new FileInputStream(path);
+			inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+			property.load(inputStreamReader);
+			inputStreamReader.close();
+			return property.getProperty(propertyKey);
+		} catch (IOException exception) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	public String filterLanguageCode(String langCode) {
@@ -33,15 +43,19 @@ public class LanguageUtil {
 		};
 	}
 
-	public String getTranslatedLineForActivity(String langCode, String activityName, String stringContent)
-			throws IOException {
+	public String getTranslatedLineForActivity(String langCode, String activityName, String stringContent) {
+		String path = this.botProperties.getLangDirectory() + '/' + this.filterLanguageCode(langCode) + ".properties";
 		String startKeyPointer = "${{";
 		String endKeyPointer = "}}";
 		var property = new Properties();
-		property.load(new InputStreamReader(new FileInputStream(
-				this.botProperties.getLangDirectory() + '/' + this.filterLanguageCode(langCode) + ".properties"),
-				StandardCharsets.UTF_8));
-
+		try {
+			var fileInputStream = new FileInputStream(path);
+			var inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+			property.load(inputStreamReader);
+			inputStreamReader.close();
+		} catch (IOException exception) {
+			throw new IllegalArgumentException();
+		}
 		while (stringContent.contains(startKeyPointer)) {
 			String key = stringContent.substring(stringContent.indexOf(startKeyPointer) + startKeyPointer.length(),
 					stringContent.indexOf(endKeyPointer));

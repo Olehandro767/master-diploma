@@ -8,7 +8,11 @@ import lombok.RequiredArgsConstructor;
 
 public class AsyncUtil {
 
-	public static <T> DownloadFileCallback<T> async(Class<T> type, IAsyncOnResultDownloadFileCallback<T> onResult,
+	private AsyncUtil() {
+		throw new IllegalStateException("Utility class");
+	}
+
+	public static <T> DownloadFileCallback<T> async(IAsyncOnResultDownloadFileCallback<T> onResult,
 			IAsyncOnExceptionDownloadFileCallback<T> onException) {
 		return new Callback<>(onResult, onException);
 	}

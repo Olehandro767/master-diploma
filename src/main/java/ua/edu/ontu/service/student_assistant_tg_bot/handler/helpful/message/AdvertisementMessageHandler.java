@@ -43,7 +43,7 @@ public class AdvertisementMessageHandler {
 	}
 
 	private boolean sendToEmail(DefaultAbsSender sender, Message message, int listSize, List<java.io.File> files,
-			String userMessage, String messageString) {
+			String messageString) {
 		try {
 			if (files.size() >= listSize) {
 				var user = message.getFrom();
@@ -55,29 +55,27 @@ public class AdvertisementMessageHandler {
 				var emailMessage = this.mailService.configureMimeMessage(
 						this.mailService.getAdvertisementEmailAddress(),
 						"Оголошення від '" + firstName + " " + lastName + "' (@" + userName + ")");
-				emailMessage.setContent(new MimeMultipart() {
-					{
-						addBodyPart(new MimeBodyPart() {
-							{
-								String msg = "";
-								for (String key : getAdvertisementKeys()) {
-									if (messageString.substring(0, key.length()).equals(key)) {
-										msg = messageString.substring(key.length());
-										break;
-									}
-								}
-								setContent(msg, "text/html; charset=utf-8");
-							}
-						});
-						for (var file : files) {
-							addBodyPart(new MimeBodyPart() {
-								{
-									attachFile(file);
-								}
-							});
-						}
+				var textMimeBodyPart = new MimeBodyPart();
+				var mimeMultipart = new MimeMultipart();
+				String msg = "";
+
+				for (String key : getAdvertisementKeys()) {
+					if (messageString.substring(0, key.length()).equals(key)) {
+						msg = messageString.substring(key.length());
+						break;
 					}
-				});
+				}
+
+				textMimeBodyPart.setContent(msg, "text/html; charset=utf-8");
+				mimeMultipart.addBodyPart(textMimeBodyPart);
+
+				for (java.io.File file : files) {
+					var fileMimeBodyPart = new MimeBodyPart();
+					fileMimeBodyPart.attachFile(file);
+					mimeMultipart.addBodyPart(fileMimeBodyPart);
+				}
+
+				emailMessage.setContent(mimeMultipart);
 				this.mailService.sendMail(emailMessage);
 				sender.execute(commonHandler.createMessage(chanId,
 						this.languageUtil.getPropertyValueByKey(langCode, "post-an-advertisement.sended_email")));
@@ -120,49 +118,42 @@ public class AdvertisementMessageHandler {
 		return false;
 	}
 
+	// FIX - It's Cognitive Complexity (use SonarLint)
 	public void handle(DefaultAbsSender sender, Message message, String messageString) throws TelegramApiException {
 		String userMessage = this.getMessage(messageString);
 
-		if (this.validateUserMessage(userMessage)) {
+		if (Objects.nonNull(userMessage) && this.validateUserMessage(userMessage)) {
 			var telegramFiles = new ArrayList<File>();
 			var files = new ArrayList<java.io.File>();
 
-			if (this.supportPhotoFile) {
-				if (message.hasPhoto()) {
-					for (var file : message.getPhoto()) {
-						telegramFiles.add(sender.execute(new GetFile(file.getFileId())));
-					}
+			if (this.supportPhotoFile && message.hasPhoto()) {
+				for (var file : message.getPhoto()) {
+					telegramFiles.add(sender.execute(new GetFile(file.getFileId())));
 				}
 			}
-			if (this.supportVideoFile) {
-				if (message.hasVideo()) {
-					telegramFiles.add(sender.execute(new GetFile(message.getVideo().getFileId())));
-				}
+			if (this.supportVideoFile && message.hasVideo()) {
+				telegramFiles.add(sender.execute(new GetFile(message.getVideo().getFileId())));
 			}
-			if (this.supportDocumentFile) {
-				if (message.hasDocument()) {
-					telegramFiles.add(sender.execute(new GetFile(message.getDocument().getFileId())));
-				}
+			if (this.supportDocumentFile && message.hasDocument()) {
+				telegramFiles.add(sender.execute(new GetFile(message.getDocument().getFileId())));
 			}
 
 			var filePathListSize = new AtomicInteger(telegramFiles.size() - 1);
 
 			if (!telegramFiles.isEmpty()) {
 				for (File telegramFile : telegramFiles) {
-					sender.downloadFileAsync(telegramFile, async(File.class, (fileName, file) -> {
-						files.add(file);
-					}, (fileName, exception) -> {
-						log.error(exception.getMessage(), exception);
-						filePathListSize.set(filePathListSize.get() - 1);
-					}));
+					sender.downloadFileAsync(telegramFile,
+							async((fileName, file) -> files.add(file), (fileName, exception) -> {
+								log.error(exception.getMessage(), exception);
+								filePathListSize.set(filePathListSize.get() - 1);
+							}));
 				}
 				CompletableFuture.runAsync(() -> {
-					while (!this.sendToEmail(sender, message, filePathListSize.get(), files, userMessage,
-							messageString))
+					while (!this.sendToEmail(sender, message, filePathListSize.get(), files, messageString))
 						;
 				});
 			} else {
-				this.sendToEmail(sender, message, 0, files, userMessage, messageString);
+				this.sendToEmail(sender, message, 0, files, messageString);
 			}
 		}
 	}

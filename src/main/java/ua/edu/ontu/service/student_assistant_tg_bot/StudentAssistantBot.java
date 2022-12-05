@@ -44,7 +44,7 @@ public class StudentAssistantBot extends TelegramLongPollingBot {
 			this.callbackQueryHandler.handle(this, update.getCallbackQuery());
 		} else if ((message.hasPhoto() || message.hasDocument() || message.hasVideo())
 				&& (Objects.isNull(message.getCaption()) && Objects.isNull(message.getText()))) {
-			return;
+			// no supported
 		} else {
 			this.messageHandler.handle(this, message);
 		}

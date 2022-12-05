@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.repo.IAdministratorRepository;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.service.SessionService;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.util.InitializationUtilV1_0;
+import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.util.InitializationUtilVOne;
 import ua.edu.ontu.service.admin_server_app.dto.AppProperties;
 import ua.edu.ontu.service.admin_server_app.util.EncryptionUtil;
 
@@ -62,7 +62,7 @@ public class ServerConfiguration implements WebMvcConfigurer {
 			NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
 		this.corsUrls = corsUrls;
 		this.administratorRepository = administratorRepository;
-		new InitializationUtilV1_0(this.administratorRepository, encryptionUtil).setUpTheFirstLaunchOfTheApplication();
+		new InitializationUtilVOne(this.administratorRepository, encryptionUtil).setUpTheFirstLaunchOfTheApplication();
 	}
 
 	@Override
