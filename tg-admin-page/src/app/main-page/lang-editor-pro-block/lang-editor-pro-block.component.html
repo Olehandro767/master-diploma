@@ -1,10 +1,10 @@
 <div *ngIf="mainPageContext.mainComponentContext.pageName === ''">
-    <ng-container *ngFor="let languageName of languageNames">
-        <div (click)="openEditor(languageName)">
+    <div *ngFor="let languageName of languageNames" style="margin: 0px auto; max-width: 10%;">
+        <div class="lang-pack-line" (click)="openEditor(languageName)">
             <span>{{ languageName }}</span>
-            <button (click)="remove(languageName)">X</button>
+            <button class="remove-lang-pack" (click)="remove(languageName)">X</button>
         </div>
-    </ng-container>
+    </div>
 </div>
 <div *ngIf="mainPageContext.mainComponentContext.pageName !== ''">
     <div class="close-page-button">

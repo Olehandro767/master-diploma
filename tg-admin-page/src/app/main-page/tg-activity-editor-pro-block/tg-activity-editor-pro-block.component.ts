@@ -57,13 +57,15 @@ export class TgActivityEditorProBlockComponent implements OnInit {
 
   public remove(activityName: string): void {
     this._deleteClicked = true
-    this._ajax.telegramBotDeleteActivity(activityName, {
-      succes: () => {
-        this.getAllActivities()
-        this._deleteClicked = false
-      },
-      onError: () => { },
-    })
+    if (confirm(this.languageService.langDictionary.are_you_shure)) {
+      this._ajax.telegramBotDeleteActivity(activityName, {
+        succes: () => {
+          this.getAllActivities()
+          this._deleteClicked = false
+        },
+        onError: () => { },
+      })
+    }
   }
 
   public openEditor(activityName: string): void {

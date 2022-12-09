@@ -2,12 +2,12 @@
     <div id="create-new-activity">
         <button (click)="mainPageContext.mainComponentContext.pageName = 'new activity'">+</button>
     </div>
-    <ng-container *ngFor="let activity of activities">
-        <div (click)="openEditor(activity)">
+    <div *ngFor="let activity of activities" style="margin: 0px auto; max-width: 30%;">
+        <div class="activity-line" (click)="openEditor(activity)">
             <span>{{ activity }}</span>
-            <button (click)="remove(activity)">X</button>
+            <button class="remove-activity" (click)="remove(activity)">X</button>
         </div>
-    </ng-container>
+    </div>
 </div>
 <div *ngIf="mainPageContext.mainComponentContext.pageName !== ''">
     <div class="close-page-button">

@@ -83,7 +83,7 @@ public class ServerConfiguration implements WebMvcConfigurer {
 	public SecurityFilterChain httpConfiguration(HttpSecurity http,
 			@Qualifier("session_service_v1.0") SessionService sessionService) throws Exception {
 		var paths = new String[] { "/admin", "/api/v1.0/admin/sign-in", };
-		return http.authorizeHttpRequests().antMatchers(paths).permitAll().anyRequest().authenticated().and().csrf()
+		return http.authorizeRequests().antMatchers(paths).permitAll().anyRequest().authenticated().and().csrf()
 				.disable().formLogin().disable().logout().disable().securityContext().and()
 				.addFilterBefore(new RequestFilter(sessionService), UsernamePasswordAuthenticationFilter.class).build();
 	}

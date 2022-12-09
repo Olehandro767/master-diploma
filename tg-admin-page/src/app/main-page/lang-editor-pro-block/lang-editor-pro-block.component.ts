@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FetchAjaxService } from 'src/app/service/ajax/ajax.service';
 import { CachingService } from 'src/app/service/caching/caching.service';
+import { LanguageService } from 'src/app/service/language/language.service';
 import { MainPageContextService } from 'src/app/service/main-page-context/main-page-context.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class LangEditorProBlockComponent implements OnInit {
     private readonly _ajax: FetchAjaxService,
     private readonly _cachingService: CachingService,
     public readonly mainPageContext: MainPageContextService,
+    public readonly languageService: LanguageService,
   ) {
     let localLanguageNames = _cachingService.getByKey<string[]>('LANGUAGE_NAMES')
     this.languageNames = (localLanguageNames != null) ? localLanguageNames : []
@@ -53,11 +55,13 @@ export class LangEditorProBlockComponent implements OnInit {
   }
 
   public remove(languageName: string): void {
-    this._ajax.telegramBotDeleteLanguagePack(languageName, {
-      succes: () => {
-        this.getAll()
-      },
-      onError: () => { },
-    })
+    if (confirm(this.languageService.langDictionary.are_you_shure)) {
+      this._ajax.telegramBotDeleteLanguagePack(languageName, {
+        succes: () => {
+          this.getAll()
+        },
+        onError: () => { },
+      })
+    }
   }
 }

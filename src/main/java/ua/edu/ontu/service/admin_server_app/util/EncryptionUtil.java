@@ -1,19 +1,27 @@
 package ua.edu.ontu.service.admin_server_app.util;
 
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import lombok.Getter;
 
 @Service
 public class EncryptionUtil {
@@ -31,7 +39,7 @@ public class EncryptionUtil {
 	}
 
 	public SecretKey generateKey(int number) throws NoSuchAlgorithmException {
-		KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
+		KeyGenerator keyGenerator = KeyGenerator.getInstance(this.algorithm);
 		keyGenerator.init(number);
 		return keyGenerator.generateKey();
 	}
@@ -40,7 +48,7 @@ public class EncryptionUtil {
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
 		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
-		return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), algorithm);
+		return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), this.algorithm);
 	}
 
 	public IvParameterSpec generateInitializationVector() {
@@ -69,7 +77,7 @@ public class EncryptionUtil {
 	public String encryptMoreEasy(String password, String privateKey) throws InvalidKeyException,
 			NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException,
 			IllegalBlockSizeException, InvalidKeySpecException {
-		return this.encrypt(ALGORITHM, password, this.getKeyFromPassword(password, privateKey),
+		return this.encrypt(this.ALGORITHM, password, this.getKeyFromPassword(password, privateKey),
 				this.generateInitializationVector());
 	}
 }

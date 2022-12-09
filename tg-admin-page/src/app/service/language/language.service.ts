@@ -15,5 +15,6 @@ export class LanguageService {
     mainPage_announcementPageButtonTitleAccept: "Прийняти",
     activity_field: 'Назва телеграм меню',
     content_field: 'Контент',
+    are_you_shure: 'Ви впевнені?',
   }
 }

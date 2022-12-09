@@ -1,11 +1,61 @@
 #create-new-activity {
     margin-left: 20px;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     text-align: left;
+}
+
+#create-new-activity button {
+    background: rgb(224, 224, 224);
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.activity-line {
+    display: grid;
+    grid-template-columns: 20fr 1fr;
+    margin-top: 0px auto;
+    margin-bottom: 5px;
+    background: rgb(0, 45, 128);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.activity-line:hover {
+    background: rgb(36, 86, 179);
+    transition: 0.5s;
+}
+
+.activity-line span {
+    text-align: left;
+    margin-left: 10px;
+    font-size: 28px;
+    color: white;
+}
+
+.activity-line .remove-activity {
+    border-radius: 5px;
+    border-width: 0px;
+    background: rgb(192, 36, 36);
+    color: white;
 }
 
 .close-page-button {
     text-align: right;
     margin-right: 20px;
+}
+
+.close-page-button button {
+    background: rgb(204, 1, 1);
+    color: white;
+    border-radius: 100%;
+    border-width: 0px;
+    font-size: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
 }

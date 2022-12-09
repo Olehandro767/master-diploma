@@ -20,7 +20,7 @@ export class SplashScreenService {
 
   public close(): void {
     const style = this._splashScreenElement.style
-    style.top = `-${window.innerHeight + 15}px`
+    style.top = `-${window.innerHeight + 100}px`
     style.transition = `${this._transitionSeconds}s`
   }
 }

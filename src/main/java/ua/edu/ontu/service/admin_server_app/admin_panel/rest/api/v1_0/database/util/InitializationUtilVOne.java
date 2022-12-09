@@ -2,6 +2,9 @@ package ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Properties;
 
 import lombok.RequiredArgsConstructor;
@@ -17,19 +20,39 @@ public class InitializationUtilVOne {
 
 	public void setUpTheFirstLaunchOfTheApplication() throws IOException {
 		var adminList = this.administratorRepository.findAll();
+		String adminInfPath = "./resources/admin.inf";
 
-		if (adminList.isEmpty()) {
-			try (var inputStream = new FileInputStream("./resources/admin.inf")) {
-				var properties = new Properties();
+		try (var inputStream = new FileInputStream(adminInfPath)) {
+			var properties = new Properties();
+			properties.load(inputStream);
+			String login = properties.getProperty("admin_login");
+			String password = properties.getProperty("private_admin_password");
+
+			if (adminList.isEmpty()) {
 				var administrator = new Administrator();
-				properties.load(inputStream);
-				administrator.setLogin(properties.getProperty("admin_login"));
-				administrator.setPassword(properties.getProperty("private_admin_password"));
+				administrator.setLogin(login);
+				administrator.setPassword(password);
 				administrator.setName("admin");
 				this.administratorRepository.save(administrator);
-			} catch (IOException exception) {
-				log.error("Can't resolve ./resources/admin.inf");
+				Files.delete(Paths.get(adminInfPath));
+			} else {
+				var adminEntity = this.administratorRepository.findByLogin(login);
+
+				if (Objects.isNull(adminEntity)) {
+					adminEntity = new Administrator();
+					adminEntity.setName(login);
+				}
+
+				adminEntity.setLogin(login);
+				adminEntity.setPassword(password);
+				this.administratorRepository.save(adminEntity);
+			}
+		} catch (Exception exception) {
+			if (adminList.isEmpty()) {
+				log.error("Can't resolve " + adminInfPath);
 				System.exit(-1);
+			} else {
+				log.warn("File " + adminInfPath + " is not exists");
 			}
 		}
 	}

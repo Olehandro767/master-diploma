@@ -41,8 +41,7 @@ public class JwtUtil {
 			return new TokenResult(decodedJwt.getClaim("login").asString(),
 					LocalDateTime.now().isBefore(parsedLocalDateTime));
 		} catch (SignatureVerificationException exception) {
-			LogUtil.logError(log, LogUtil.ADMIN_PANEL_JWT_ERROR, "token = \"" + token + "\", role = " + role.name(),
-					exception);
+			LogUtil.logError(log, LogUtil.ADMIN_PANEL_JWT_ERROR, "Can not decode token { token = \"" + token + "\", role = " + role.name() + " }");
 			return null;
 		}
 	}
