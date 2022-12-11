@@ -28,6 +28,9 @@ security:
   basic:
     enabled: false
 
+telegram-bot-api:
+  url: null
+
 telegram-bot:
   directory: './resources/tg bot'
   env-file: .env
