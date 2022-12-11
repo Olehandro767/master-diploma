@@ -1,4 +1,4 @@
-package ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.util;
+package ua.edu.ontu.service.admin_server_app.database.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,8 +9,8 @@ import java.util.Properties;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.model.admin.Administrator;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.repo.IAdministratorRepository;
+import ua.edu.ontu.service.admin_server_app.database.model.admin.Administrator;
+import ua.edu.ontu.service.admin_server_app.database.repo.IAdministratorRepository;
 
 @Slf4j
 @RequiredArgsConstructor

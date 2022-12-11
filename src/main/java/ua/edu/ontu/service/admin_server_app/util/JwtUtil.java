@@ -23,9 +23,10 @@ public class JwtUtil {
 
 	@Getter
 	private final String JWT_START_KEY_PART = "ONTU ";
+	@Getter
+	private final int JWT_START_KEY_PART_LENGTH = this.JWT_START_KEY_PART.length();
 	private final String SECRET_JWT_CODE = UUID.randomUUID().toString();
 	private final Algorithm ALGORITHM = Algorithm.HMAC256(this.SECRET_JWT_CODE);
-	private final int JWT_START_KEY_PART_LENGTH = this.JWT_START_KEY_PART.length();
 
 	private String generateToken(Role role, String login) {
 		return create().withClaim("role", role.getLowercaseName()).withClaim("login", login)
@@ -41,7 +42,8 @@ public class JwtUtil {
 			return new TokenResult(decodedJwt.getClaim("login").asString(),
 					LocalDateTime.now().isBefore(parsedLocalDateTime));
 		} catch (SignatureVerificationException exception) {
-			LogUtil.logError(log, LogUtil.ADMIN_PANEL_JWT_ERROR, "Can not decode token { token = \"" + token + "\", role = " + role.name() + " }");
+			LogUtil.logError(log, LogUtil.ADMIN_PANEL_JWT_ERROR,
+					"Can not decode token { token = \"" + token + "\", role = " + role.name() + " }");
 			return null;
 		}
 	}

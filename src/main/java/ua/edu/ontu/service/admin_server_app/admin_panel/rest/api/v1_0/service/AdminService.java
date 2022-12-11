@@ -1,15 +1,16 @@
 package ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.Objects;
+
 import org.springframework.stereotype.Service;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.repo.IAdministratorRepository;
+
+import lombok.RequiredArgsConstructor;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.dto.CheckAdminResult;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.request.common.SignInRequest;
+import ua.edu.ontu.service.admin_server_app.database.repo.IAdministratorRepository;
 import ua.edu.ontu.service.admin_server_app.dto.jwt.TokenResult;
 import ua.edu.ontu.service.admin_server_app.util.EncryptionUtil;
 import ua.edu.ontu.service.admin_server_app.util.JwtUtil;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +30,8 @@ public class AdminService {
 			return new CheckAdminResult(admin,
 					Objects.nonNull(admin) && admin.checkPassword(signInRequest.getPassword(), this.encryptionUtil));
 		} catch (Exception ignore) {
+			return new CheckAdminResult(null, false);
 		}
-		return new CheckAdminResult(null, false);
 	}
 
 	public String generateToken(String login) {

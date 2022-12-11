@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,13 +36,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.repo.IAdministratorRepository;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.service.SessionService;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.util.InitializationUtilVOne;
+import ua.edu.ontu.service.admin_server_app.database.repo.IAdministratorRepository;
+import ua.edu.ontu.service.admin_server_app.database.service.SessionService;
+import ua.edu.ontu.service.admin_server_app.database.util.InitializationUtilVOne;
 import ua.edu.ontu.service.admin_server_app.dto.AppProperties;
 import ua.edu.ontu.service.admin_server_app.util.EncryptionUtil;
 
 @Configuration
+@EnableWebSecurity
 public class ServerConfiguration implements WebMvcConfigurer {
 
 	private final String corsUrls;
@@ -80,10 +81,9 @@ public class ServerConfiguration implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public SecurityFilterChain httpConfiguration(HttpSecurity http,
-			@Qualifier("session_service_v1.0") SessionService sessionService) throws Exception {
-		var paths = new String[] { "/admin", "/api/v1.0/admin/sign-in", };
-		return http.authorizeRequests().antMatchers(paths).permitAll().anyRequest().authenticated().and().csrf()
+	public SecurityFilterChain httpConfiguration(HttpSecurity http, SessionService sessionService) throws Exception {
+		String[] paths = { "/admin", "/api/v1.0/admin/sign-in", };
+		return http.authorizeRequests().antMatchers(paths).permitAll().anyRequest().hasRole("ADMIN").and().csrf()
 				.disable().formLogin().disable().logout().disable().securityContext().and()
 				.addFilterBefore(new RequestFilter(sessionService), UsernamePasswordAuthenticationFilter.class).build();
 	}
@@ -119,12 +119,17 @@ class RequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			Authentication authentication = (this.sessionService
-					.authorizationHeaderIsValid(request.getHeader(HttpHeaders.AUTHORIZATION)))
-							? new UsernamePasswordAuthenticationToken(null, null,
-									new ArrayList<>(List.of((GrantedAuthority) () -> "USER")))
-							: new UsernamePasswordAuthenticationToken(null, null);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			boolean isValid = this.sessionService
+					.authorizationHeaderIsValid(request.getHeader(HttpHeaders.AUTHORIZATION));
+			Authentication authentication = (isValid)
+					? new UsernamePasswordAuthenticationToken("ADMIN", null,
+							new ArrayList<>(List.of((GrantedAuthority) () -> "ROLE_ADMIN")))
+					: new UsernamePasswordAuthenticationToken(null, null);
+
+			if (authentication.isAuthenticated()) {
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+
 			filterChain.doFilter(request, response);
 		} catch (Exception exception) {
 			RequestFilter.log.error(exception.getMessage(), exception);

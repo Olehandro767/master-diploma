@@ -1,7 +1,8 @@
-package ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.repo;
+package ua.edu.ontu.service.admin_server_app.database.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.model.admin.Administrator;
+
+import ua.edu.ontu.service.admin_server_app.database.model.admin.Administrator;
 
 public interface IAdministratorRepository extends JpaRepository<Administrator, Long> {
 

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.request.common.SignInRequest;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.response.common.SignInResponse;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.service.AdminService;
+import ua.edu.ontu.service.admin_server_app.database.service.SessionService;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.service.Ad
 public class AdminRestController {
 
 	private final AdminService adminService;
+	private final SessionService sessionService;
 
 	@GetMapping("/check-session")
 	public ResponseEntity<SignInResponse> checkSession(
@@ -41,7 +43,9 @@ public class AdminRestController {
 		var adminResult = this.adminService.checkAdmin(json);
 
 		if (adminResult.isValid()) {
-			return ResponseEntity.ok(new SignInResponse(this.adminService.generateToken(json.getLogin())));
+			String token = this.adminService.generateToken(json.getLogin());
+			this.sessionService.addNewToken(token);
+			return ResponseEntity.ok(new SignInResponse(token));
 		}
 
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

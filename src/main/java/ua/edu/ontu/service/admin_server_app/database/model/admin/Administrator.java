@@ -1,4 +1,4 @@
-package ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.database.model.admin;
+package ua.edu.ontu.service.admin_server_app.database.model.admin;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
