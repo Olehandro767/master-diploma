@@ -1,9 +1,6 @@
 package ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.rest_controller;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import ua.edu.ontu.service.Application;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.request.telegram_bot.TelegramBotNewActivityRequest;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.request.telegram_bot.TelegramBotUpdateActivityReques;
 import ua.edu.ontu.service.admin_server_app.admin_panel.rest.api.v1_0.response.telegram_bot.TelegramBotAllActivitiesResponse;
@@ -30,9 +28,9 @@ public class TelegramBotActivityRestController {
 	private final TelegramBotActivityService telegramBotActivityService;
 
 	@GetMapping("/get-example-content")
-	public String getExampleContent() throws IOException, URISyntaxException {
-		return new String(Files.readAllBytes(
-				Path.of(this.getClass().getClassLoader().getResource("static/admin/example-yaml-file.yaml").toURI())));
+	public String getExampleContent() throws IOException {
+		var resource = Application.class.getClassLoader().getResourceAsStream("static/admin/example-yaml-file.yaml");
+		return new String(resource.readAllBytes());
 	}
 
 	@PutMapping("/create")

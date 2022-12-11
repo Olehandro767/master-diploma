@@ -17,7 +17,7 @@ import ua.edu.ontu.service.student_assistant_tg_bot.dto.bot.BotContextDTO;
 import ua.edu.ontu.service.student_assistant_tg_bot.handler.CallbackQueryHandler;
 import ua.edu.ontu.service.student_assistant_tg_bot.handler.MessageHandler;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class StudentAssistantBot extends TelegramLongPollingBot {
 
